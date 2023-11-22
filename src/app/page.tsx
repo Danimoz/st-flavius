@@ -1,113 +1,106 @@
-import Image from 'next/image'
+import Hero from '@/components/Hero'
+import { Lato } from 'next/font/google'
+import Homily from '@/images/homily.jpeg';
+import Bible from '@/images/bible.jpg';
+import Eucharist from '@/images/eucharist.jpg';
+import Image from 'next/image';
+import Link from 'next/link';
+
+const lato = Lato({ 
+  subsets: ['latin'],
+  weight: ['400', '700'] 
+})
+
 
 export default function Home() {
+  const resources = [
+    { img: Homily, text: 'Daily Homilies', link: '#' },
+    { img: Bible, text: 'Daily Readings', link: 'https://universalis.com/mass.htm' }
+  ]
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main>
+      <Hero />
+      <section className='relative z-10 p-8 -mt-24 w-full'>
+        <div className="grid grid-cols-1 md:grid-cols-2 p-8 container mx-auto shadow-2xl rounded-3xl bg-white">
+          <div className='w-full'>
+            <h1 className='text-3xl font-semibold'>Holy Sacrifice of the Mass</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>MASS SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'>
+                <span className='font-bold'>SUNDAY: &nbsp;</span>
+                7:00 AM | 9:00 AM (Children and Youth Mass) | 10:30 AM | 6:00 PM
+              </p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>MON, WED, THUR, FRI: &nbsp;</span>6:30 AM | 6:30 PM </p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>TUESDAY: &nbsp;</span>6:30 AM </p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>SATURDAY: &nbsp;</span>7:00 AM </p>
+            </div>
+
+            <h1 className='text-3xl font-semibold'>Adoration</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>ADORATION SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'>Every Last Friday of the Month</p>
+            </div>
+
+            <h1 className='text-3xl font-semibold'>Office Hours</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>OFFICE HOUR SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>MON, TUE, WED, FRI: &nbsp;</span> 9AM - 2PM </p>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>DAYS WITH THE PARISH PRIEST</p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>TUE, WED, FRI: &nbsp;</span> 9AM - 12PM </p>
+            </div>
+          </div>
+
+          <div className='w-full'>
+            <h1 className='text-3xl font-semibold'>Sacrament of Penance and Reconciliation</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>CONFESSION SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>WEDNESDAYS & SATURDAYS: &nbsp;</span>After the Morning Mass</p>
+            </div>
+            <h1 className='text-3xl font-semibold'>Sacrament of Initiation</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>BAPTISM SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>INFANT BAPTISM: &nbsp;</span>Every Second Saturday of the Month</p>
+            </div>
+            <h1 className='text-3xl font-semibold'>Catechesim Classes</h1>
+            <div className={`${lato.className} text-[#333232] mb-8`}>
+              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>CATECHISM CLASS SCHEDULE</p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>BAPTISM | HOLY COMMUNION | PRAYER CLASS: &nbsp;</span> SATURDAYS 3PM - 5PM </p>
+              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>CONFIRMATION | RCIA: &nbsp;</span> SUNDAYS 3PM - 5PM </p>
+            </div>
+          </div>
+        </div> 
+      </section>
+
+      <section className='container mx-auto py-12 mt-4'>
+        <h1 className='text-center text-4xl font-bold'>Connections</h1>
+        <p className={`${lato.className} text-center text-xl mb-8 italic`}>Resources for the daily walk of faith.</p>
+        <div className='flex flex-col md:flex-row space-y-6 md:space-x-12 md:space-y-0 items-center justify-center'>
+          {resources.map((resource) => (
+            <Link target='_blank' href={resource.link} key={resource.text} className='group rounded-xl relative hover:text-white hover:bg-[#e7a837]'>
+              <Image src={resource.img} alt={resource.text} width={350} height={306} className='rounded-xl transition-transform duration-300 hover:scale-105 hover:opacity-20'/>
+              <p className='absolute bottom-0 left-0 right-0 text-center text-[#333232] group-hover:text-white group-hover:text-2xl text-xl px-6 font-bold'>{resource.text}</p>
+            </Link>
+          ))}
         </div>
-      </div>
+      </section>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <section className='bg-gradient-to-r from-[#847561] to-[#cdc2b6] py-12 text-white'>
+        <div className='container mx-auto'>
+          <h1 className='text-3xl md:text-5xl mb-4 text-center leading-loose tracking-widest'><span className='font-bold '>S.F.C.C</span>... &nbsp; &nbsp; &nbsp; ST. FLAVIUS CATHOLIC CHURCH</h1>
+          <p className='text-2xl text-center leading-relaxed tracking-wide'><span className='font-semibold'>COMMUNITY OF GOD&apos;S PEOPLE: </span>UNITED IN HEART AND SOUL</p>
+        </div>
+      </section>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <section className='py-12 container mx-auto flex flex-col md:flex-row space-y-6 md:space-x-12 items-center'>
+        <Image src={Eucharist} alt='Eucharist' className='rounded-[50%]' />
+        <div>
+          <h1 className='font-black text-3xl text-center mb-4 leading-relaxed'>Our Mission</h1>
+          <p className={`${lato.className} text-2xl mb-10 text-center`}>Preaching the Gospel While Practicing the Corporal Works of Mercy</p>
+          <h1 className='font-black text-3xl text-center mb-4 leading-relaxed'>Our Vision</h1>
+          <p className={`${lato.className} text-2xl mb-6 text-center`}>Win Souls for Christ and build a community rooted in Faith and Love</p>
+        </div>
+      </section>
     </main>
   )
 }
