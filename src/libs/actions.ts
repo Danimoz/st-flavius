@@ -15,6 +15,11 @@ export async function handleContact(formData: FormData){
   console.log(data)
 }
 
+async function generateSequentialId() {
+  const count = await Parishioner.countDocuments();
+  return String(count + 1).padStart(4, '0');
+}
+
 export async function newParishioner(formData: FormData){
   const data = ParishionerRegistrationSchema.safeParse(Object.fromEntries(formData))
  
@@ -27,7 +32,9 @@ export async function newParishioner(formData: FormData){
       lastName: data.data.lastName
     })
     if (existingUser) return {error: 'Parishioner already exist'}
-    await Parishioner.create(data.data)
+    const id = await generateSequentialId()
+    await Parishioner.create({ parishionerId: id, ...data.data })
+
     revalidatePath('/parishioners')
     return { success: true }
   } catch(error) {

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { FaCaretDown } from 'react-icons/fa';
 import { FaCross } from "react-icons/fa";
@@ -21,7 +21,6 @@ const navbarSections: NavbarLinks[] = [
   { name:'Home', link: '/' },
   { name: 'Welcome', 
     dropdown: [
-      { name: 'Parishioner Registration', link: '/register' },
       { name: 'Contact Us', link: '/contact' },
       { name: 'Team', link: '/team' },
     ]
@@ -31,10 +30,21 @@ const navbarSections: NavbarLinks[] = [
 export default function Navbar(){
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setopenDropdown] = useState<string | null>(null);
+  const navbarRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = (name: string) => {
     setopenDropdown((prev) => (prev === name ? null : name ))
   }
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (navbarRef.current && !navbarRef.current.contains(e.target as Node)) {
+        setIsMenuOpen(false)
+      }
+    }
+    document.addEventListener('click', handleOutsideClick)
+    return () => document.removeEventListener('click', handleOutsideClick)
+  }, [])
 
   return (
     <header className="w-full px-9 top-0 sticky z-50 border-b-[3px] border-[#847561] bg-white">
@@ -76,12 +86,12 @@ export default function Navbar(){
             {section.dropdown ? (
               <button onClick={() => toggleDropdown(section.name)}>{section.name}</button>
             ): (
-              <Link href={section.link as string}>{section.name}</Link>
+              <Link onClick={() => isMenuOpen && setIsMenuOpen(false)} href={section.link as string}>{section.name}</Link>
             )}
             {openDropdown === section.name && (
               <div className="bg-white py-2">
                 {section.dropdown?.map((item) => (
-                  <Link href={item.link} key={item.name} className="block px-4 py-2">{item.name}</Link>
+                  <Link onClick={() => isMenuOpen && setIsMenuOpen(false)} href={item.link} key={item.name} className="block px-4 py-2">{item.name}</Link>
                 ))}
               </div>
             )}

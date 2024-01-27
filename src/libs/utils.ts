@@ -1,4 +1,5 @@
 import { toast } from "sonner"
+import Parishioner from "./models"
 
 interface NotificationProps{
   type: 'error' | 'success'

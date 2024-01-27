@@ -29,6 +29,7 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
         <section className={`${lato.className} container mx-auto overflow-x-auto`}>
           {parishioners?.map((parishioner, idx) => (
             <div key={idx} className="text-xl p-2 flex space-x-6 border-b-2">
+              <h2>{parishioner.parishionerId}</h2>
               <h2>{parishioner.firstName} {parishioner.lastName}</h2>
               <h2>{parishioner.email} &nbsp; {parishioner.phoneNumber}</h2>
               <h2>{parishioner.address}</h2>

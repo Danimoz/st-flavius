@@ -10,4 +10,5 @@ export interface IParishioner {
   baptized: boolean;
   confirmed: boolean;
   communicant: boolean;
+  parishionerId: string;
 }

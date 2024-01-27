@@ -14,7 +14,7 @@ const lato = Lato({
 
 export default function Home() {
   const resources = [
-    { img: Homily, text: 'Daily Homilies', link: '#' },
+    { img: Homily, text: 'Daily Homilies', link: 'https://frenimabasimacjoemsp.podbean.com/' },
     { img: Bible, text: 'Daily Readings', link: 'https://universalis.com/mass.htm' }
   ]
 

@@ -7,12 +7,13 @@ const parishionerSchema = new Schema<IParishioner>({
   address: { type: String, required: true },
   occupation: { type: String, required: true },
   dateOfBirth: { type: String, required: true },
+  parishionerId: { type: String, required: true },
   phoneNumber: String,
   gender: String,
   email: String,
   baptized: Boolean,
   confirmed: Boolean,
-  communicant: Boolean
+  communicant: Boolean,
 }, {
   timestamps: true,
 })
