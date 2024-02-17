@@ -2,24 +2,46 @@
 
 import { SubmitButton } from "@/components/SubmitButton";
 import { newParishioner } from "@/libs/actions";
-import { notify } from "@/libs/utils";
-import { ParishionerRegistrationErrors } from "@/libs/validations";
-import { useRouter } from "next/navigation";
+import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/libs/validations";
 import { useState } from "react";
 
 export default function Registration(){
   const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({})
-  const router = useRouter();
 
   async function action(data: FormData) {
-    const result = await newParishioner(data)
-    if ('error' in result){
-      if (typeof result.error === 'string') notify({ type: 'error', message: result.error})
-      else setValidationError(result.error?.fieldErrors || {})
-    } else {
-      notify({ type: 'success', message: 'Successful!'})
-      router.refresh()
+    const validata = ParishionerRegistrationSchema.safeParse(Object.fromEntries(data)) 
+    if (!validata.success) {
+      setValidationError(validata.error.flatten().fieldErrors)
+      return
     }
+
+    //@ts-ignore
+    const handler = PaystackPop.setup({
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY_TEST as string,
+      email: data.get('email') as string || data.get('phone') as string + "@stflaviusoworonshoki.com",
+      amount: 1000 * 100,
+      currency: 'NGN',
+      ref: (new Date()).getTime().toString(),
+      callback: function(response: any) {
+        const reference = response.reference;
+        fetch('https://api.paystack.co/transaction/verify/'+ reference, {
+          headers: {
+            Authorization: "Bearer " + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY_TEST as string
+          }
+        }).then((res: any) => res.json()).then((json: any) => {
+          if(json.status === true){
+            newParishioner(data).then((res: any) => {
+              if(res.success) alert('Payment complete! You have been Registered');
+              else alert('Payment complete! You have been Registered but there was an error sending your details to the server. Please contact the admin');
+            })
+          }
+        })
+      },
+      onClose: function() {
+        alert('Transaction was not completed, window closed.');
+      },   
+    });
+    handler.openIframe();
   }
 
   return (
@@ -31,7 +53,8 @@ export default function Registration(){
       </section>
       <section className="container mx-auto py-12 px-2">
         <h1>Registration</h1>
-        <form action={action}>
+
+        <form action={action} >
           <div className="md:flex md:space-x-6">
             <div className="mb-4 w-full">
               <label htmlFor='firstName' className="block font-semibold">First Name *</label>
@@ -57,8 +80,8 @@ export default function Registration(){
             <p className="text-red-600">{validationError?.address?.join(', ')}</p>
           </div>
           <div className="mb-4 w-full">
-            <label htmlFor='occupation' className="block font-semibold">Occupation *</label>
-            <input type='text' placeholder="Enter your Occupation" name="occupation" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
+            <label htmlFor='occupation' className="block font-semibold">Occupation</label>
+            <input type='text' placeholder="Enter your Occupation" name="occupation" className="p-3 w-full border-2 border-[#847561] rounded-xl"  />
             <p className="text-red-600">{validationError?.occupation?.join(', ')}</p>
           </div>
           <div className="md:flex md:space-x-6">
@@ -88,7 +111,11 @@ export default function Registration(){
             </div>
           </div>
 
-          <SubmitButton buttonText="Submit"/>
+          <div className="flex justify-center mt-6">
+            <SubmitButton buttonText="Proceed to Payment"/>
+          </div>
+          
+          <script src="https://js.paystack.co/v1/inline.js" />
         </form>
       </section>
     </main>

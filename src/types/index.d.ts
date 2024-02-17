@@ -2,7 +2,7 @@ export interface IParishioner {
   firstName: string;
   lastName: string;
   address: string;
-  occupation: string;
+  occupation?: string;
   dateOfBirth: string;
   phoneNumber?: string;
   gender?: string;
@@ -10,5 +10,5 @@ export interface IParishioner {
   baptized: boolean;
   confirmed: boolean;
   communicant: boolean;
-  parishionerId: string;
+  parishionerId?: string;
 }

@@ -5,14 +5,35 @@ import Parishioner from "./models"
 import connectToDb from "./mongodb"
 import { ContactFormSchema, ParishionerRegistrationSchema } from "./validations"
 import { revalidatePath } from "next/cache"
+import { Resend } from "resend"
+import { EmailTemplate } from "@/components/emailTemplate"
 
 export async function handleContact(formData: FormData){
-  const data = ContactFormSchema.safeParse(Object.fromEntries(formData))
+  const validata = ContactFormSchema.safeParse(Object.fromEntries(formData))
  
-  if (!data.success){
-    return { error: data.error.flatten() }
+  if (!validata.success){
+    return { error: validata.error.flatten() }
   }
-  console.log(data)
+
+  const resend = new Resend(process.env.RESEND_API_KEY as string)
+  const emailUser = process.env.EMAIL_USERNAME as string;
+
+  let { name, email, message, phone } = validata.data
+  if (!phone) phone = ''
+
+  try {
+    const { data } = await resend.emails.send({
+      from: 'St Flavius Catholic Church <onboarding@resend.dev>',
+      to: [emailUser],
+      subject: 'New Message from Auto Clems',
+      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
+      react: EmailTemplate({ name, email, phone, message })
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false };
+  }
+  
 }
 
 async function generateSequentialId() {
@@ -22,7 +43,6 @@ async function generateSequentialId() {
 
 export async function newParishioner(formData: FormData){
   const data = ParishionerRegistrationSchema.safeParse(Object.fromEntries(formData))
- 
   if (!data.success) return { error: data.error.flatten() }
 
   try {

@@ -23,6 +23,7 @@ const navbarSections: NavbarLinks[] = [
     dropdown: [
       { name: 'Contact Us', link: '/contact' },
       { name: 'Team', link: '/team' },
+      { name: 'Parish Registration', link: '/register' },
     ]
   },
 ]

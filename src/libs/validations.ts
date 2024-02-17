@@ -18,7 +18,7 @@ export const ParishionerRegistrationSchema = z.object({
   lastName: z.string().min(1).max(100),
   dateOfBirth: z.string(),
   address: z.string().min(1).max(255),
-  occupation: z.string().min(1).max(100),
+  occupation: z.string().optional(),
   email: z.string().max(0).or(z.string().email()),
   phone: z.string().optional(), // Update max length according to your needs
   baptized: z.string().transform(value => value === 'on').optional(),
