@@ -66,7 +66,7 @@ export default function Registration(){
         <div className="flex justify-center">
           {isLoading && <Loader />}
         </div>
-        
+
         <form action={action} >
           <div className="md:flex md:space-x-6">
             <div className="mb-4 w-full">
@@ -128,7 +128,7 @@ export default function Registration(){
             <SubmitButton buttonText="Proceed to Payment"/>
           </div>
           
-          <script src="https://js.paystack.co/v1/inline.js" />
+          <script src="https://js.paystack.co/v1/inline.js" defer />
         </form>
       </section>
     </main>
