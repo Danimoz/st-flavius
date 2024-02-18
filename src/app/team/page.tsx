@@ -24,7 +24,7 @@ export default function Team(){
         <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-6 p-2'>
           {staffs.map((staff) => (
             <div key={staff.name} className='md:flex items-center space-x-9 mb-6'>
-              <Image src={staff.img} alt={staff.name} className='rounded-full shadow-lg' width={300} height={300}/>
+              <Image src={staff.img} alt={staff.name} className='rounded-full shadow-lg w-[300px] h-[400px]' width={300} height={300} />
               <div className='my-4'>
                 <h1 className='text-2xl leading-9 font-semibold hover:text-[#847561]'>{staff.name}</h1>
                 <p className='text-[#847561] text-base mt-4'>{staff.designation}</p>

@@ -53,10 +53,10 @@ export async function newParishioner(formData: FormData){
     })
     if (existingUser) return {error: 'Parishioner already exist'}
     const id = await generateSequentialId()
-    await Parishioner.create({ parishionerId: id, ...data.data })
+    const parishioner = await Parishioner.create({ parishionerId: id, ...data.data })
 
     revalidatePath('/parishioners')
-    return { success: true }
+    return { success: true , parishionerId: parishioner._id }
   } catch(error) {
     return {error: 'Could not register at this time'}
   }

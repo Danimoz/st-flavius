@@ -4,8 +4,8 @@ export default function Loader() {
   return (
     <div className='flex justify-center items-center'>
       <ColorRing 
-        width={40}
-        height={40}
+        width={90}
+        height={90}
         ariaLabel='blocks-loading'
         wrapperStyle={{}}
         wrapperClass='blocks-wrapper'

@@ -11,4 +11,5 @@ export interface IParishioner {
   confirmed: boolean;
   communicant: boolean;
   parishionerId?: string;
+  createdAt?: Date;
 }

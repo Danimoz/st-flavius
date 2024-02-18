@@ -4,9 +4,14 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { newParishioner } from "@/libs/actions";
 import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/libs/validations";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { set } from "mongoose";
+import Loader from "@/libs/loader";
 
 export default function Registration(){
-  const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({})
+  const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
 
   async function action(data: FormData) {
     const validata = ParishionerRegistrationSchema.safeParse(Object.fromEntries(data)) 
@@ -17,7 +22,7 @@ export default function Registration(){
 
     //@ts-ignore
     const handler = PaystackPop.setup({
-      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY_TEST as string,
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
       email: data.get('email') as string || data.get('phone') as string + "@stflaviusoworonshoki.com",
       amount: 1000 * 100,
       currency: 'NGN',
@@ -26,13 +31,17 @@ export default function Registration(){
         const reference = response.reference;
         fetch('https://api.paystack.co/transaction/verify/'+ reference, {
           headers: {
-            Authorization: "Bearer " + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY_TEST as string
+            Authorization: "Bearer " + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY as string
           }
         }).then((res: any) => res.json()).then((json: any) => {
           if(json.status === true){
+            setIsLoading(true);
             newParishioner(data).then((res: any) => {
-              if(res.success) alert('Payment complete! You have been Registered');
-              else alert('Payment complete! You have been Registered but there was an error sending your details to the server. Please contact the admin');
+              if(res.success) {
+                alert('Payment complete! You have been Registered')
+                router.push('/register/' + res.parishionerId)
+                setIsLoading(false);
+              } else alert('Payment complete! You have been Registered but there was an error sending your details to the server. Please contact the admin');
             })
           }
         })
@@ -54,6 +63,10 @@ export default function Registration(){
       <section className="container mx-auto py-12 px-2">
         <h1>Registration</h1>
 
+        <div className="flex justify-center">
+          {isLoading && <Loader />}
+        </div>
+        
         <form action={action} >
           <div className="md:flex md:space-x-6">
             <div className="mb-4 w-full">
