@@ -128,7 +128,7 @@ export default function Registration(){
             <SubmitButton buttonText="Proceed to Payment"/>
           </div>
           
-          <script src="https://js.paystack.co/v1/inline.js" defer />
+          <script src="https://js.paystack.co/v1/inline.js" async />
         </form>
       </section>
     </main>
