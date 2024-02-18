@@ -13,7 +13,7 @@ export default function Contact(){
 
   async function action(data: FormData){
     const result = await handleContact(data)
-    if (result && result.error.fieldErrors) setValidationError(result.error.fieldErrors);
+    if (result && result.error?.fieldErrors) setValidationError(result.error.fieldErrors);
   }
 
   return (
