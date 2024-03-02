@@ -18,8 +18,8 @@ export default function ParishionersSearch({ search }: { search?: string}) {
       return
     }
 
-    if (!query) router.push('/parishioners')
-    else router.push(`/parishioners?search=${query}`)
+    if (!query) router.push('/admin/parishioners')
+    else router.push(`/admin/parishioners?search=${query}`)
   }, [query])
 
   return (
