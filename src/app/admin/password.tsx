@@ -5,7 +5,7 @@ export default function Password(){
 
   useEffect(() => {
     const password = prompt("Enter password")
-    if (password !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+    if (password !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD as string) {
       alert("You are not authorized to view this page")
       window.location.href = "/"
     } 
