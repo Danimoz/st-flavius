@@ -6,6 +6,7 @@ import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Metadata } from "next";
+import Password from "../password";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false }
@@ -32,6 +33,7 @@ export default function CashRegistration(){
 
   return (
     <main>
+      <Password />
       <section className="py-12 bg-[#847561]">
         <div className="container mx-auto">
           <h1 className="text-4xl md:text-6xl italic text-white">Become a Member</h1>

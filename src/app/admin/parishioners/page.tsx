@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import ParishionersSearch from "./search";
 import Link from "next/link";
 import { type Metadata } from "next";
+import Password from "../password";
 
 const lato = Lato({ 
   subsets: ['latin'],
@@ -22,6 +23,7 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
   const {data: parishioners, totalItems} = await allParishioners(page, limit, search);
   return (
     <main>
+      <Password />
       <section className="bg-[#847561] py-8">
         <div className="container mx-auto">
           <h1 className="italic text-white text-4xl md:text-6xl">Parishioners</h1>
