@@ -35,7 +35,7 @@ export default function CardImage({ parishioner }: { parishioner: IParishioner }
         <p className="text-xl leading-loose mb-2"><span className="font-bold uppercase">Occupation: </span>{parishioner.occupation}</p>          
         <p className="text-xl leading-loose mb-2"><span className="font-bold uppercase">ParishionerID: </span>{parishioner.parishionerId}</p>          
         <p className="text-xl leading-loose mb-2"><span className="font-bold uppercase">Email: </span>{parishioner.email}</p>          
-        <p className="text-xl leading-loose mb-2"><span className="font-bold uppercase">Phone: </span>{parishioner.phoneNumber}</p>          
+        <p className="text-xl leading-loose mb-2"><span className="font-bold uppercase">Phone: </span>{parishioner.phone}</p>          
         <br /><br />
         <p>
           The above named person is a registered member of the church and is entitled to the following benefits.
