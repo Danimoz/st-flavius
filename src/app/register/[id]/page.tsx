@@ -1,4 +1,4 @@
-import getParishioner from "@/libs/fetch"
+import { getParishioner }from "@/libs/fetch"
 import { notFound } from "next/navigation"
 import CardImage from "./CardImage"
 

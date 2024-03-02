@@ -8,12 +8,13 @@ const parishionerSchema = new Schema<IParishioner>({
   occupation: { type: String, required: true },
   dateOfBirth: { type: String, required: true },
   parishionerId: { type: String, required: true },
-  phoneNumber: String,
+  phone: String,
   gender: String,
   email: String,
   baptized: Boolean,
   confirmed: Boolean,
   communicant: Boolean,
+  married: Boolean,
 }, {
   timestamps: true,
 })

@@ -58,6 +58,7 @@ export async function newParishioner(formData: FormData){
     revalidatePath('/parishioners')
     return { success: true , parishionerId: parishioner._id }
   } catch(error) {
+    console.error(error)
     return {error: 'Could not register at this time'}
   }
 }

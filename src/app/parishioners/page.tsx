@@ -25,21 +25,40 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
 
       <ParishionersSearch search={search} />
 
-      <Suspense fallback='Parishioner Loading..'>
+      <Suspense fallback='Parishioners Loading..'>
         <section className={`${lato.className} container mx-auto overflow-x-auto`}>
-          {parishioners?.map((parishioner, idx) => (
-            <div key={idx} className="text-xl p-2 flex space-x-6 border-b-2">
-              <h2>{parishioner.parishionerId}</h2>
-              <h2>{parishioner.firstName} {parishioner.lastName}</h2>
-              <h2>{parishioner.email} &nbsp; {parishioner.phoneNumber}</h2>
-              <h2>{parishioner.address}</h2>
-              <h2>{parishioner.occupation}</h2>
-              <h2>{parishioner.dateOfBirth}</h2>
-              <h2>{parishioner.baptized === true ? 'Baptized' : 'Not Baptized'}</h2>
-              <h2>{parishioner.confirmed === true ? 'Confirmed' : 'Not Confirmed'}</h2>
-              <h2>{parishioner.communicant === true ? 'Communicant': 'Not a Communicant'}</h2>
-            </div>
-          ))}
+        <table className="min-w-full">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-2">ID</th>
+              <th className="p-2">Name</th>
+              <th className="p-2">Contact</th>
+              <th className="p-2">Address</th>
+              <th className="p-2">Occupation</th>
+              <th className="p-2">Date of Birth</th>
+              <th className="p-2">Baptized</th>
+              <th className="p-2">Confirmed</th>
+              <th className="p-2">Communicant</th>
+              <th className="p-2">Married</th>
+            </tr>
+          </thead>
+          <tbody>
+            {parishioners?.map((parishioner, idx) => (
+              <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="p-2">{parishioner.parishionerId}</td>
+                <td className="p-2">{parishioner.firstName} {parishioner.lastName}</td>
+                <td className="p-2">{parishioner.email} &nbsp; {parishioner.phone}</td>
+                <td className="p-2">{parishioner.address}</td>
+                <td className="p-2">{parishioner.occupation}</td>
+                <td className="p-2">{parishioner.dateOfBirth}</td>
+                <td className="p-2">{parishioner.baptized ? 'Baptized' : 'Not Baptized'}</td>
+                <td className="p-2">{parishioner.confirmed ? 'Confirmed' : 'Not Confirmed'}</td>
+                <td className="p-2">{parishioner.communicant ? 'Communicant': 'Not a Communicant'}</td>
+                <td className="p-2">{parishioner.married ? 'Married' : 'Not Married'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
           <div className="flex justify-center space-x-6 my-6">
             <Link
