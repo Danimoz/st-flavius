@@ -5,10 +5,9 @@ import { newParishioner } from "@/libs/actions";
 import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/libs/validations";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { type Metadata } from "next";
 import Password from "../password";
 
-export const metadata: Metadata = {
+export const metadata = {
   robots: { index: false, follow: false }
 }
 
