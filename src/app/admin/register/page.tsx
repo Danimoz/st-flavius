@@ -7,10 +7,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Password from "../password";
 
-export const metadata = {
-  robots: { index: false, follow: false }
-}
-
 export default function CashRegistration(){
   const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({});
   const router = useRouter()
