@@ -5,6 +5,11 @@ import { newParishioner } from "@/libs/actions";
 import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/libs/validations";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false }
+}
 
 export default function CashRegistration(){
   const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({});

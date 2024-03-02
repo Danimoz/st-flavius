@@ -3,11 +3,16 @@ import { Lato } from "next/font/google";
 import { Suspense } from "react";
 import ParishionersSearch from "./search";
 import Link from "next/link";
+import { type Metadata } from "next";
 
 const lato = Lato({ 
   subsets: ['latin'],
   weight: ['400', '700'] 
 })
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false }
+}
 
 export default async function ViewParishioners({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined}}){
   const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
