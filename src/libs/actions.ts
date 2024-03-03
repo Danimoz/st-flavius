@@ -55,7 +55,8 @@ export async function newParishioner(formData: FormData){
     const id = await generateSequentialId()
     const parishioner = await Parishioner.create({ parishionerId: id, ...data.data })
 
-    revalidatePath('/parishioners')
+    revalidatePath('/admin/parishioners')
+    revalidatePath('/register')
     return { success: true , parishionerId: parishioner._id }
   } catch(error) {
     console.error(error)
