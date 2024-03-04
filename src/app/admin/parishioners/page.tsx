@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default async function ViewParishioners({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined}}){
   const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
-  const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 30
+  const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 40
   const search = typeof searchParams.search === 'string' ? searchParams.search : undefined
 
   const {data: parishioners, totalItems} = await allParishioners(page, limit, search);
@@ -69,7 +69,7 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
 
           <div className="flex justify-center space-x-6 my-6">
             <Link
-              href={{ pathname: '/parishioners', query: {
+              href={{ pathname: '/admin/parishioners', query: {
                 ...(search ? { search } : {}),
                 page: page > 1 ? page - 1 : 1
               }}} 
@@ -78,7 +78,7 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
               Previous
             </Link>
             <Link
-              href={{ pathname: '/parishioners', query: {
+              href={{ pathname: '/admin/parishioners', query: {
                 ...(search ? { search } : {}),
                 page: page < Math.ceil(totalItems/limit) ? page + 1 : Math.ceil(totalItems/limit)
               }}} 
