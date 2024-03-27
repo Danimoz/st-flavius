@@ -25,7 +25,6 @@ const navbarSections: NavbarLinks[] = [
       { name: 'Team', link: '/team' },
     ]
   },
-  { name: 'Parish Registration', link: '/register' },
 ]
 
 export default function Navbar(){
