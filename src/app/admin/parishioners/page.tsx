@@ -53,7 +53,7 @@ export default async function ViewParishioners({ searchParams }: { searchParams:
             {parishioners?.map((parishioner, idx) => (
               <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                 <td className="p-2">{parishioner.parishionerId}</td>
-                <td className="p-2">{parishioner.firstName} {parishioner.lastName}</td>
+                <td className="p-2">{parishioner.firstName} &nbsp; {parishioner.lastName}</td>
                 <td className="p-2">{parishioner.email} &nbsp; {parishioner.phone}</td>
                 <td className="p-2">{parishioner.address}</td>
                 <td className="p-2">{parishioner.occupation}</td>

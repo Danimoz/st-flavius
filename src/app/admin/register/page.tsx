@@ -20,7 +20,7 @@ export default function CashRegistration(){
     const res = await newParishioner(data)
     if (res.success) {
       alert('Payment complete! You have been Registered')
-      router.push('/register/' + res.parishionerId)
+      router.push('/registrationhold/' + res.parishionerId)
     } else {
       alert('There was an error sending your details to the server. Please contact the admin');
     }
