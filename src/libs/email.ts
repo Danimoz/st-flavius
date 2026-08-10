@@ -5,9 +5,8 @@ import nodemailer, { type SendMailOptions, type Transporter } from 'nodemailer';
 let gmailTransporter: Transporter | undefined;
 
 function getGmailCredentials() {
-  const user = process.env.EMAIL_USERNAME;
-  const rawPassword = process.env.GMAIL_APP_PASSWORD || process.env.GMAIL_APP_PADSSWORD;
-  const pass = rawPassword?.replace(/\s+/g, '');
+  const user = process.env.EMAIL_SEND_CREDENTIAL;
+  const pass = process.env.GMAIL_APP_PASSWORD
 
   if (!user || !pass) return null;
   return { user, pass };
@@ -32,6 +31,6 @@ export async function sendParishEmail(options: Omit<SendMailOptions, 'from' | 't
   return getGmailTransporter(credentials).sendMail({
     ...options,
     from: `St. Flavius Catholic Church <${credentials.user}>`,
-    to: credentials.user,
+    to: process.env.EMAIL_USERNAME,
   });
 }
