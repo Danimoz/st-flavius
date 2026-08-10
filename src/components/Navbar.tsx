@@ -1,103 +1,84 @@
 'use client';
 
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import { FaCaretDown } from 'react-icons/fa';
-import { FaCross } from "react-icons/fa";
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { FaBars, FaCross, FaXmark } from 'react-icons/fa6';
 
-interface DropdownItems {
-  name: string;
-  link: string
-}
+const navigation = [
+  { name: 'Mass & Sacraments', href: '/#mass-times' },
+  { name: 'Parish Life', href: '/#parish-life' },
+  { name: 'Plan a Visit', href: '/#visit' },
+  { name: 'Contact', href: '/contact' },
+];
 
-interface NavbarLinks {
-  name: string;
-  link?: string;
-  dropdown?: DropdownItems[]
-}
-
-const navbarSections: NavbarLinks[] = [
-  { name:'Home', link: '/' },
-  { name: 'Welcome', 
-    dropdown: [
-      { name: 'Contact Us', link: '/contact' },
-      { name: 'Team', link: '/team' },
-    ]
-  },
-]
-
-export default function Navbar(){
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setopenDropdown] = useState<string | null>(null);
-  const navbarRef = useRef<HTMLDivElement>(null);
-
-  const toggleDropdown = (name: string) => {
-    setopenDropdown((prev) => (prev === name ? null : name ))
-  }
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (navbarRef.current && !navbarRef.current.contains(e.target as Node)) {
-        setIsMenuOpen(false)
+    function handlePointerDown(event: MouseEvent) {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
       }
     }
-    document.addEventListener('click', handleOutsideClick)
-    return () => document.removeEventListener('click', handleOutsideClick)
-  }, [])
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    }
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
-    <header className="w-full px-9 top-0 sticky z-50 border-b-[3px] border-[#847561] bg-white">
-      <nav className="container mx-auto flex h-20 items-center justify-between">
-        <div className="md:px-8 flex items-center space-x-4">
-          <FaCross size={40} />
-          <h1 className="text-2xl md:text-4xl font-bold text-[#333232]">St. Flavius Catholic Church</h1>
-        </div>
+    <header ref={headerRef} className="sticky top-0 z-50 border-b border-[#d8cdbd] bg-[#fffdf9]">
+      <nav aria-label="Primary navigation" className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
+        <Link href="/" className="flex min-h-12 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633]">
+          <span className="flex h-11 w-9 items-center justify-center rounded-t-full border border-[#8a7b69] text-[#6f2633]">
+            <FaCross aria-hidden="true" size={21} />
+          </span>
+          <span className="font-ecclesial text-lg leading-tight text-[#211d19] sm:text-xl">St. Flavius<br className="sm:hidden" /> Catholic Church</span>
+        </Link>
 
-        <div className="hidden md:flex space-x-10">
-          {navbarSections.map((section) => (
-            <div key={section.name} className="relative">
-              {section.dropdown ? (
-                <button className='px-6 flex' onClick={() => toggleDropdown(section.name)}>{section.name} <FaCaretDown /> </button>
-              ): (
-                <Link className='hover:text-white hover:bg-[#847561] px-6 py-3 rounded-full' href={section.link as string}>{section.name}</Link>
-              )}
-              {openDropdown === section.name && (
-                <div className="absolute z-10 bg-white shadow-md py-2 mt-2 min-w-max rounded border-2 border-[#cdc2b6]">
-                  {section.dropdown?.map((item) => (
-                    <Link href={item.link} key={item.name} className="block hover:bg-[#847561] hover:text-white px-4 py-2">{item.name}</Link>
-                  ))}
-                </div>
-              )}
-            </div>
+        <div className="hidden items-center gap-1 lg:flex">
+          {navigation.map((item) => (
+            <Link key={item.name} href={item.href} className="inline-flex min-h-11 items-center px-4 text-sm font-semibold text-[#4e443a] transition-colors hover:text-[#6f2633] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+              {item.name}
+            </Link>
           ))}
+          <Link href="/fault-reporting" className="ml-3 inline-flex min-h-11 items-center border border-[#6f2633] px-4 text-sm font-bold text-[#6f2633] transition-colors hover:bg-[#6f2633] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+            Report a fault
+          </Link>
         </div>
 
-        <div className="md:hidden">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <Image src='/menu.svg' alt='Menubar Toggle' width={30} height={30} priority />
-          </button>
-        </div>
+        <button
+          type="button"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-navigation"
+          aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          onClick={() => setIsMenuOpen((open) => !open)}
+          className="inline-flex h-11 w-11 items-center justify-center text-[#211d19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633] lg:hidden"
+        >
+          {isMenuOpen ? <FaXmark aria-hidden="true" size={24} /> : <FaBars aria-hidden="true" size={22} />}
+        </button>
       </nav>
 
-      <div className={isMenuOpen ? 'w-full' : 'hidden'}>
-        {navbarSections.map((section) => (
-          <div key={section.name} className="mb-4">
-            {section.dropdown ? (
-              <button onClick={() => toggleDropdown(section.name)}>{section.name}</button>
-            ): (
-              <Link onClick={() => isMenuOpen && setIsMenuOpen(false)} href={section.link as string}>{section.name}</Link>
-            )}
-            {openDropdown === section.name && (
-              <div className="bg-white py-2">
-                {section.dropdown?.map((item) => (
-                  <Link onClick={() => isMenuOpen && setIsMenuOpen(false)} href={item.link} key={item.name} className="block px-4 py-2">{item.name}</Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+      <div id="mobile-navigation" className={isMenuOpen ? 'border-t border-[#d8cdbd] bg-[#fffdf9] lg:hidden' : 'hidden'}>
+        <nav aria-label="Mobile navigation" className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+          {navigation.map((item) => (
+            <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="flex min-h-12 items-center border-b border-[#e6ded3] py-3 font-semibold text-[#342d27] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6f2633]">
+              {item.name}
+            </Link>
+          ))}
+          <Link href="/fault-reporting" onClick={() => setIsMenuOpen(false)} className="mt-4 flex min-h-12 items-center justify-center bg-[#6f2633] px-5 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+            Report a facility fault
+          </Link>
+        </nav>
       </div>
     </header>
-  )
+  );
 }

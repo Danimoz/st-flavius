@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --ink: #211d19;
+  --charcoal: #181613;
+  --stone-50: #faf9f7;
+  --stone-100: #f1eeea;
+  --stone-300: #d8cdbd;
+  --stone-500: #8a7b69;
+  --wine: #6f2633;
+  --wine-dark: #4c1822;
+  --gold: #c9a760;
+}
+
+body {
+  background: var(--stone-50);
+  color: var(--ink);
+}
+
+html {
+  scroll-padding-top: 6rem;
+}
+
+::selection { background: var(--wine); color: white; }
+
+.font-ecclesial { font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif; }
+
+h1, h2, h3 { text-wrap: balance; }
+
+p { text-wrap: pretty; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

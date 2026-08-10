@@ -1,106 +1,203 @@
-import Hero from '@/components/Hero'
-import { Lato } from 'next/font/google'
+import Hero from '@/components/Hero';
 import Homily from '@/images/homily.jpeg';
 import Bible from '@/images/bible.jpg';
-import Eucharist from '@/images/eucharist.jpg';
+import Worship from '@/images/contactprayer.jpg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FaArrowRight, FaChevronDown, FaClock, FaEnvelope, FaLocationDot } from 'react-icons/fa6';
 
-const lato = Lato({ 
-  subsets: ['latin'],
-  weight: ['400', '700'] 
-})
+const sundayMasses = ['7:00 AM', '9:00 AM', '10:30 AM', '6:00 PM'];
 
+const weekdayMasses = [
+  { days: 'Monday, Wednesday, Thursday & Friday', times: '6:30 AM · 6:30 PM' },
+  { days: 'Tuesday', times: '6:30 AM' },
+  { days: 'Saturday', times: '7:00 AM' },
+];
+
+const additionalSchedules = [
+  {
+    title: 'Confession',
+    detail: 'Wednesdays and Saturdays after the morning Mass.',
+  },
+  {
+    title: 'Adoration',
+    detail: 'The last Friday of every month.',
+  },
+  {
+    title: 'Infant Baptism',
+    detail: 'The second Saturday of every month.',
+  },
+  {
+    title: 'Catechism & Christian initiation',
+    detail: 'Baptism, Holy Communion, and prayer classes: Saturdays, 3:00–5:00 PM. Confirmation and the Rite of Christian Initiation of Adults (RCIA): Sundays, 3:00–5:00 PM.',
+  },
+];
+
+const pathways = [
+  { label: 'Worship', href: '/#mass-times', text: 'Mass and sacrament times' },
+  { label: 'Visit', href: '/#visit', text: 'Address and parish office' },
+  { label: 'Belong', href: '/#parish-life', text: 'Meet the parish community' },
+  { label: 'Serve', href: '/fault-reporting', text: 'Help us care for the church' },
+];
 
 export default function Home() {
-  const resources = [
-    { img: Homily, text: 'Daily Homilies', link: 'https://frenimabasimacjoemsp.podbean.com/' },
-    { img: Bible, text: 'Daily Readings', link: 'https://universalis.com/mass.htm' }
-  ]
-
   return (
     <main>
       <Hero />
-      <section className='relative z-10 p-8 -mt-24 w-full'>
-        <div className="grid grid-cols-1 md:grid-cols-2 p-8 container mx-auto shadow-2xl rounded-3xl bg-white">
-          <div className='w-full'>
-            <h1 className='text-3xl font-semibold'>Holy Sacrifice of the Mass</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>MASS SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'>
-                <span className='font-bold'>SUNDAY: &nbsp;</span>
-                7:00 AM | 9:00 AM (Children and Youth Mass) | 10:30 AM | 6:00 PM
-              </p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>MON, WED, THUR, FRI: &nbsp;</span>6:30 AM | 6:30 PM </p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>TUESDAY: &nbsp;</span>6:30 AM </p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>SATURDAY: &nbsp;</span>7:00 AM </p>
-            </div>
 
-            <h1 className='text-3xl font-semibold'>Adoration</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>ADORATION SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'>Every Last Friday of the Month</p>
-            </div>
-
-            <h1 className='text-3xl font-semibold'>Office Hours</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>OFFICE HOUR SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>MON, TUE, WED, FRI: &nbsp;</span> 9AM - 2PM </p>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>DAYS WITH THE PARISH PRIEST</p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>TUE, WED, FRI: &nbsp;</span> 9AM - 12PM </p>
-            </div>
-          </div>
-
-          <div className='w-full'>
-            <h1 className='text-3xl font-semibold'>Sacrament of Penance and Reconciliation</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>CONFESSION SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>WEDNESDAYS & SATURDAYS: &nbsp;</span>After the Morning Mass</p>
-            </div>
-            <h1 className='text-3xl font-semibold'>Sacrament of Initiation</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>BAPTISM SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>INFANT BAPTISM: &nbsp;</span>Every Second Saturday of the Month</p>
-            </div>
-            <h1 className='text-3xl font-semibold'>Catechesim Classes</h1>
-            <div className={`${lato.className} text-[#333232] mb-8`}>
-              <p className='text-[#D94C12] font-bold mt-2 leading-relaxed text-2xl'>CATECHISM CLASS SCHEDULE</p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>BAPTISM | HOLY COMMUNION | PRAYER CLASS: &nbsp;</span> SATURDAYS 3PM - 5PM </p>
-              <p className='mt-2 leading-relaxed text-xl'><span className='font-bold'>CONFIRMATION | RCIA: &nbsp;</span> SUNDAYS 3PM - 5PM </p>
-            </div>
-          </div>
-        </div> 
-      </section>
-
-      <section className='container mx-auto py-12 mt-4'>
-        <h1 className='text-center text-4xl font-bold'>Connections</h1>
-        <p className={`${lato.className} text-center text-xl mb-8 italic`}>Resources for the daily walk of faith.</p>
-        <div className='flex flex-col md:flex-row space-y-6 md:space-x-12 md:space-y-0 items-center justify-center'>
-          {resources.map((resource) => (
-            <Link target='_blank' href={resource.link} key={resource.text} className='group rounded-xl relative hover:text-white hover:bg-[#e7a837]'>
-              <Image src={resource.img} alt={resource.text} width={350} height={306} className='rounded-xl transition-transform duration-300 hover:scale-105 hover:opacity-20'/>
-              <p className='absolute bottom-0 left-0 right-0 text-center text-[#333232] group-hover:text-white group-hover:text-2xl text-xl px-6 font-bold'>{resource.text}</p>
+      <nav aria-label="Homepage sections" className="border-b border-[#d8cdbd] bg-[#fffdf9]">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 lg:grid-cols-4 lg:px-10">
+          {pathways.map((pathway, index) => (
+            <Link
+              key={pathway.label}
+              href={pathway.href}
+              className={`group flex min-h-24 flex-col justify-center px-4 py-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#6f2633] sm:px-6 ${index % 2 === 0 ? 'border-r border-[#d8cdbd]' : ''} ${index < 2 ? 'border-b border-[#d8cdbd] lg:border-b-0' : ''} ${index === 1 ? 'lg:border-r' : ''}`}
+            >
+              <span className="font-ecclesial text-xl text-[#211d19] transition-colors group-hover:text-[#6f2633]">{pathway.label}</span>
+              <span className="mt-1 text-xs leading-5 text-[#65594d] sm:text-sm">{pathway.text}</span>
             </Link>
           ))}
         </div>
-      </section>
+      </nav>
 
-      <section className='bg-gradient-to-r from-[#847561] to-[#cdc2b6] py-12 text-white'>
-        <div className='container mx-auto'>
-          <h1 className='text-3xl md:text-5xl mb-4 text-center leading-loose tracking-widest'><span className='font-bold '>S.F.C.C</span>... &nbsp; &nbsp; &nbsp; ST. FLAVIUS CATHOLIC CHURCH</h1>
-          <p className='text-2xl text-center leading-relaxed tracking-wide'><span className='font-semibold'>COMMUNITY OF GOD&apos;S PEOPLE: </span>UNITED IN HEART AND SOUL</p>
+      <section id="mass-times" className="scroll-mt-24 bg-[#f8f7f5] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <header className="mb-10 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+            <h2 className="font-ecclesial text-[clamp(2.8rem,6vw,5rem)] leading-none tracking-[-0.025em] text-[#211d19]">Worship with us.</h2>
+            <p className="max-w-2xl text-base leading-7 text-[#5d5147] lg:justify-self-end lg:text-lg">
+              The Eucharist is at the heart of parish life. Start with the Sunday schedule below, then open the other sacrament and devotion times only when you need them.
+            </p>
+          </header>
+
+          <div className="grid overflow-hidden border border-[#b9aa96] lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="bg-[#6f2633] p-7 text-white sm:p-10 lg:p-12">
+              <p className="font-semibold text-[#f0dca8]">Sunday Mass</p>
+              <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                {sundayMasses.map((time) => (
+                  <time key={time} className="font-ecclesial text-3xl leading-none sm:text-4xl">{time}</time>
+                ))}
+              </div>
+              <p className="mt-9 border-t border-white/25 pt-5 text-sm leading-6 text-[#f2ece2]">
+                The 9:00 AM celebration is the Children and Youth Mass.
+              </p>
+            </div>
+
+            <div className="bg-[#fffdf9] p-7 sm:p-10 lg:p-12">
+              <h3 className="font-ecclesial text-2xl text-[#211d19]">Weekday Mass</h3>
+              <dl className="mt-6 divide-y divide-[#d8cdbd]">
+                {weekdayMasses.map((schedule) => (
+                  <div key={schedule.days} className="py-5 first:pt-0 sm:flex sm:items-baseline sm:justify-between sm:gap-6">
+                    <dt className="font-semibold leading-6 text-[#342d27]">{schedule.days}</dt>
+                    <dd className="mt-1 shrink-0 text-sm font-bold text-[#6f2633] sm:mt-0">{schedule.times}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-px overflow-hidden border border-[#b9aa96] bg-[#b9aa96] md:grid-cols-2">
+            {additionalSchedules.map((schedule) => (
+              <details key={schedule.title} className="group bg-[#fffdf9] open:bg-white">
+                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-semibold text-[#342d27] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#6f2633] [&::-webkit-details-marker]:hidden">
+                  {schedule.title}
+                  <FaChevronDown aria-hidden="true" className="shrink-0 text-[#6f2633] transition-transform duration-200 group-open:rotate-180" />
+                </summary>
+                <p className="px-6 pb-6 text-sm leading-6 text-[#5d5147]">{schedule.detail}</p>
+              </details>
+            ))}
+          </div>
+
+          <p className="mt-7 max-w-3xl text-sm leading-6 text-[#5d5147]">
+            Schedules may change for solemnities and special parish events. If you are travelling a long distance, please <Link href="/contact" className="inline-flex min-h-[44px] items-center font-semibold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">contact the parish office</Link> to confirm.
+          </p>
         </div>
       </section>
 
-      <section className='py-12 container mx-auto flex flex-col md:flex-row space-y-6 md:space-x-12 items-center'>
-        <Image src={Eucharist} alt='Eucharist' className='rounded-[50%]' />
-        <div>
-          <h1 className='font-black text-3xl text-center mb-4 leading-relaxed'>Our Mission</h1>
-          <p className={`${lato.className} text-2xl mb-10 text-center`}>Preaching the Gospel While Practicing the Corporal Works of Mercy</p>
-          <h1 className='font-black text-3xl text-center mb-4 leading-relaxed'>Our Vision</h1>
-          <p className={`${lato.className} text-2xl mb-6 text-center`}>Win Souls for Christ and build a community rooted in Faith and Love</p>
+      <section id="visit" className="scroll-mt-24 bg-[#211d19] text-white">
+        <div className="mx-auto grid max-w-7xl lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="relative min-h-[420px] overflow-hidden lg:min-h-[640px]">
+            <Image src={Worship} alt="Parishioners raising their hands in prayer during worship" fill sizes="(min-width: 1024px) 48vw, 100vw" className="object-cover object-center" />
+            <div className="absolute inset-0 bg-[#2b1220]/20" />
+          </div>
+
+          <div className="flex flex-col justify-center px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
+            <h2 className="font-ecclesial text-[clamp(2.8rem,5vw,4.8rem)] leading-none tracking-[-0.025em]">Your first visit.</h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[#d8cdbd]">
+              Come as you are. Our church is on Akerele Street in Oworonshoki, and parishioners are available to help you find a seat or answer questions before Mass.
+            </p>
+
+            <div className="mt-9 space-y-5 border-y border-white/20 py-7 text-sm text-[#f2ece2]">
+              <p className="flex items-start gap-4"><FaLocationDot aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" /><span><strong className="block text-white">St. Flavius Catholic Church</strong>2 Akerele Street, Oworonshoki, Lagos</span></p>
+              <p className="flex items-start gap-4"><FaClock aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" /><span><strong className="block text-white">Parish office</strong>Monday, Tuesday, Wednesday &amp; Friday · 9:00 AM–2:00 PM</span></p>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="https://www.google.com/maps/search/?api=1&query=St.+Flavius+Catholic+Church+Oworonshoki" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-3 bg-[#c9a760] px-6 py-3 font-bold text-[#181613] hover:bg-[#e3c77f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+                Get directions <FaArrowRight aria-hidden="true" size={13} /><span className="sr-only"> (opens in a new tab)</span>
+              </a>
+              <Link href="/contact" className="inline-flex min-h-12 items-center justify-center border border-white/50 px-6 py-3 font-semibold text-white hover:border-white hover:bg-white hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Contact the parish</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="parish-life" className="scroll-mt-24 bg-[#fffdf9] px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <div>
+              <h2 className="font-ecclesial text-[clamp(2.8rem,5vw,4.8rem)] leading-none tracking-[-0.025em] text-[#211d19]">Belong. Grow. Serve.</h2>
+              <p className="mt-6 max-w-xl text-lg leading-8 text-[#5d5147]">
+                Parish life continues beyond Sunday. Meet the people who serve the community, speak with the parish office, or help us care for the church premises.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
+                <Link href="/team" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">Meet our parish team <FaArrowRight aria-hidden="true" size={12} /></Link>
+                <Link href="/fault-reporting" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">Report a facility fault <FaArrowRight aria-hidden="true" size={12} /></Link>
+              </div>
+            </div>
+
+            <blockquote className="border-y border-[#c9a760] py-8 font-ecclesial text-3xl leading-tight text-[#342d27] sm:py-10 sm:text-4xl">
+              “Preach the Gospel while practising the corporal works of mercy.”
+              <cite className="mt-5 block font-sans text-sm font-semibold not-italic text-[#6f2633]">Our parish mission</cite>
+            </blockquote>
+          </div>
+
+          <div className="mt-16 grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
+            <a href="https://frenimabasimacjoemsp.podbean.com/" target="_blank" rel="noopener noreferrer" className="group relative min-h-[380px] overflow-hidden bg-[#211d19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633]">
+              <Image src={Homily} alt="" fill sizes="(min-width: 768px) 60vw, 100vw" className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025]" />
+              <div className="absolute inset-0 bg-[#f1eeea]/35" />
+              <div className="absolute inset-x-0 bottom-0 bg-[#f1eeea]/95 p-7 text-[#211d19] sm:p-9">
+                <p className="text-sm font-semibold text-[#6f2633]">Listen</p>
+                <h3 className="mt-2 font-ecclesial text-4xl">Daily homilies</h3>
+                <p className="mt-3 max-w-md text-sm leading-6 text-[#4f453b]">Reflect on the Word with homilies from the parish.</p>
+                <span className="mt-5 inline-flex items-center gap-2 font-bold text-[#6f2633]">Open homilies <FaArrowRight aria-hidden="true" size={12} /><span className="sr-only"> (opens in a new tab)</span></span>
+              </div>
+            </a>
+
+            <a href="https://universalis.com/mass.htm" target="_blank" rel="noopener noreferrer" className="group relative min-h-[380px] overflow-hidden bg-[#6f2633] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633]">
+              <Image src={Bible} alt="" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.025]" />
+              <div className="absolute inset-0 bg-[#2b1220]/60" />
+              <div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-9">
+                <p className="text-sm font-semibold text-[#f0dca8]">Read</p>
+                <h3 className="mt-2 font-ecclesial text-4xl">Daily readings</h3>
+                <p className="mt-3 text-sm leading-6 text-[#f2ece2]">Follow the readings and prayers of the Church.</p>
+                <span className="mt-5 inline-flex items-center gap-2 font-bold">Open readings <FaArrowRight aria-hidden="true" size={12} /><span className="sr-only"> (opens in a new tab)</span></span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#6f2633] px-6 py-14 text-white lg:px-10 lg:py-16">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="font-ecclesial text-3xl sm:text-4xl">Need help finding your place here?</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-[#f2ece2]">The parish office can help with sacrament preparation, joining a society, or arranging a conversation with the parish team.</p>
+          </div>
+          <Link href="/contact" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-3 bg-white px-6 py-3 font-bold text-[#6f2633] hover:bg-[#f2ece2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            Contact the parish <FaEnvelope aria-hidden="true" />
+          </Link>
         </div>
       </section>
     </main>
-  )
+  );
 }

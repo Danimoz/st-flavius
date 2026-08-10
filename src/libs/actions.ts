@@ -7,6 +7,7 @@ import { ContactFormSchema, ParishionerRegistrationSchema } from "./validations"
 import { revalidatePath } from "next/cache"
 import { Resend } from "resend"
 import { EmailTemplate } from "@/components/emailTemplate"
+import { requireAdminSession } from "./admin-auth"
 
 export async function handleContact(formData: FormData){
   const validata = ContactFormSchema.safeParse(Object.fromEntries(formData))
@@ -42,6 +43,7 @@ async function generateSequentialId() {
 }
 
 export async function newParishioner(formData: FormData){
+  await requireAdminSession()
   const data = ParishionerRegistrationSchema.safeParse(Object.fromEntries(formData))
   if (!data.success) return { error: data.error.flatten() }
 
@@ -65,6 +67,7 @@ export async function newParishioner(formData: FormData){
 }
 
 export async function allParishioners(page: number, limit: number, query?: string){
+  await requireAdminSession()
   try {
     await connectToDb();
 

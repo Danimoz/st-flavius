@@ -11,7 +11,7 @@ export function SubmitButton({ buttonText }: SubmitButtonProps) {
   const { pending } = useFormStatus()
  
   return (
-    <button type="submit" aria-disabled={pending} className='px-8 py-4 rounded-xl bg-[#847561] hover:bg-[#4E3D31] text-white text-xl'>
+    <button type="submit" disabled={pending} aria-disabled={pending} className='inline-flex min-h-12 items-center justify-center bg-[#6f2633] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#4c1822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633] disabled:cursor-wait disabled:opacity-70'>
       {pending? <Loader /> : buttonText}
     </button>
   )

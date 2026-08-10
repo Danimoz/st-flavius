@@ -1,141 +1,79 @@
 'use client';
 
-import { SubmitButton } from "@/components/SubmitButton";
-import { newParishioner } from "@/libs/actions";
-import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from "@/libs/validations";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Loader from "@/libs/loader";
+import ParishionerFormFields from '@/components/ParishionerFormFields';
+import { SubmitButton } from '@/components/SubmitButton';
+import { newParishioner } from '@/libs/actions';
+import Loader from '@/libs/loader';
+import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from '@/libs/validations';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export default function RegistrationForm({ totalParishioners }: { totalParishioners: number  }){
+export default function RegistrationForm({ totalParishioners }: { totalParishioners: number }) {
   const [validationError, setValidationError] = useState<ParishionerRegistrationErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   async function action(data: FormData) {
-    const validata = ParishionerRegistrationSchema.safeParse(Object.fromEntries(data)) 
-    if (!validata.success) {
-      setValidationError(validata.error.flatten().fieldErrors)
-      return
+    const validated = ParishionerRegistrationSchema.safeParse(Object.fromEntries(data));
+    if (!validated.success) {
+      setValidationError(validated.error.flatten().fieldErrors);
+      return;
     }
 
-    //@ts-ignore
+    // @ts-ignore Paystack injects this browser API from its hosted script.
     const handler = PaystackPop.setup({
       key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
-      email: data.get('email') as string || data.get('phone') as string + "@stflaviusoworonshoki.com",
+      email: data.get('email') as string || data.get('phone') as string + '@stflaviusoworonshoki.com',
       amount: 1000 * 100,
       currency: 'NGN',
-      ref: (new Date()).getTime().toString(),
-      callback: function(response: any) {
+      ref: new Date().getTime().toString(),
+      callback: function (response: any) {
         const reference = response.reference;
-        fetch('https://api.paystack.co/transaction/verify/'+ reference, {
-          headers: {
-            Authorization: "Bearer " + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY as string
-          }
+        fetch('https://api.paystack.co/transaction/verify/' + reference, {
+          headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY as string },
         }).then((res: any) => res.json()).then((json: any) => {
-          if(json.status === true){
+          if (json.status === true) {
             setIsLoading(true);
             newParishioner(data).then((res: any) => {
-              if(res.success) {
-                alert('Payment complete! You have been Registered')
-                router.push('/register/' + res.parishionerId)
+              if (res.success) {
+                alert('Payment complete! You have been registered');
+                router.push('/registrationhold/' + res.parishionerId);
                 setIsLoading(false);
-              } else alert('Payment complete! You have been Registered but there was an error sending your details to the server. Please contact the admin');
-            })
+              } else alert('Payment complete, but there was an error saving your details. Please contact the parish office.');
+            });
           }
-        })
+        });
       },
-      onClose: function() {
-        alert('Transaction was not completed, window closed.');
-      },   
+      onClose: function () {
+        alert('Transaction was not completed.');
+      },
     });
     handler.openIframe();
   }
 
   return (
-    <main>
-      <section className="py-12 bg-[#847561]">
-        <div className="container mx-auto">
-          <h1 className="text-4xl md:text-6xl italic text-white">Become a Member</h1>
-        </div>
-      </section>
-      <section className="container mx-auto py-12 px-2">
-        <h1>Registration</h1>
+    <section className="px-6 py-14 lg:px-10 lg:py-20">
+      <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <aside className="border-l-2 border-[#c9a760] pl-6 lg:sticky lg:top-28">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6f2633]">Parish register</p>
+          <h2 className="mt-3 font-ecclesial text-3xl">A record of belonging.</h2>
+          <p className="mt-4 text-sm leading-6 text-[#6f6254]">Registration helps the parish keep accurate records and care for members through the sacramental life of the Church.</p>
+          <p className="mt-7 border-t border-[#d8cdbd] pt-5 text-sm text-[#4f453b]"><strong className="block font-ecclesial text-3xl text-[#6f2633]">{totalParishioners}</strong> parishioners registered</p>
+        </aside>
 
-        <div className="flex justify-center">
-          {isLoading && <Loader />}
-        </div>
-
-        <p className="text-center text-xl mb-4 ">{totalParishioners} People have registered!</p>
-
-        <form action={action} >
-          <div className="md:flex md:space-x-6">
-            <div className="mb-4 w-full">
-              <label htmlFor='firstName' className="block font-semibold">First Name *</label>
-              <input type='text' placeholder="Enter your First Name" name="firstName" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
-              <p className="text-red-600">{validationError?.firstName?.join(', ')}</p>
-
-            </div>
-            <div className="mb-4 w-full">
-              <label htmlFor='lastName' className="block font-semibold">Last Name *</label>
-              <input type='text' placeholder="Enter your Last Name" name="lastName" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
-              <p className="text-red-600">{validationError?.lastName?.join(', ')}</p>
-
-            </div>
-          </div>
-          <div className="mb-4 w-full">
-            <label htmlFor='dateOfBirth' className="block font-semibold">Date of Birth *</label>
-            <input type='date' placeholder="Enter your Date of Birth" name="dateOfBirth" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
-            <p className="text-red-600">{validationError?.dateOfBirth?.join(', ')}</p>
-          </div>
-          <div className="mb-4 w-full">
-            <label htmlFor='address' className="block font-semibold">Address *</label>
-            <input type='text' placeholder="Enter your Address" name="address" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
-            <p className="text-red-600">{validationError?.address?.join(', ')}</p>
-          </div>
-          <div className="mb-4 w-full">
-            <label htmlFor='occupation' className="block font-semibold">Occupation</label>
-            <input type='text' placeholder="Enter your Occupation" name="occupation" className="p-3 w-full border-2 border-[#847561] rounded-xl" required />
-            <p className="text-red-600">{validationError?.occupation?.join(', ')}</p>
-          </div>
-          <div className="md:flex md:space-x-6">
-            <div className="mb-4 w-full">
-              <label htmlFor='email' className="block font-semibold">Email</label>
-              <input type='email' placeholder="Enter your Email" name="email" className="p-3 w-full border-2 border-[#847561] rounded-xl" />
-              <p className="text-red-600">{validationError?.email?.join(', ')}</p>
-            </div>
-            <div className="mb-4 w-full">
-              <label htmlFor='phone' className="block font-semibold">Phone Number</label>
-              <input type='text' placeholder="Enter your Phone Number" name="phone" className="p-3 w-full border-2 border-[#847561] rounded-xl"  />
-              <p className="text-red-600">{validationError?.phone?.join(', ')}</p>
-            </div>
-          </div>
-          <div className="md:flex justify-around space-x-8">
-            <div className="flex mb-4 justify-center space-x-4">
-              <input type="checkbox" name="baptized" className="p-3 h-6 w-6 border-2 border-[#847561] rounded-xl"/>
-              <label htmlFor='baptized' className="font-semibold">Baptized</label>
-            </div>
-            <div className="flex mb-4 justify-center space-x-4">
-              <input type="checkbox" name="communicant" className="p-3 h-6 w-6 border-2 border-[#847561] rounded-xl"/>
-              <label htmlFor='communicant' className="font-semibold">First Eucharist/Communion</label>
-            </div>
-            <div className="flex mb-4 justify-center space-x-4">
-              <input type="checkbox" name="confirmed" className="p-3 h-6 w-6 border-2 border-[#847561] rounded-xl"/>
-              <label htmlFor='confirmed' className="font-semibold">Confirmation</label>
-            </div>
-            <div className="flex mb-4 justify-center space-x-4">
-              <input type="checkbox" name="married" className="p-3 h-6 w-6 border-2 border-[#847561] rounded-xl"/>
-              <label htmlFor='married' className="font-semibold">Wedded in the Church</label>
-            </div>
+        <form action={action} className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_18px_50px_rgba(55,43,30,0.08)] sm:p-9">
+          <div className="mb-8 border-b border-[#d8cdbd] pb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#6f2633]">Membership details</p>
+            <h2 className="mt-3 font-ecclesial text-3xl sm:text-4xl">Parishioner registration</h2>
+            <p className="mt-3 text-sm leading-6 text-[#6f6254]">Fields marked with an asterisk are required.</p>
           </div>
 
-          <div className="flex justify-center mt-6">
-            <SubmitButton buttonText="Proceed to Payment"/>
-          </div>
-          
+          {isLoading && <div className="mb-6 flex justify-center" aria-live="polite"><Loader /></div>}
+          <ParishionerFormFields errors={validationError} />
+          <div className="mt-9 flex justify-end border-t border-[#d8cdbd] pt-7"><SubmitButton buttonText="Proceed to payment" /></div>
           <script src="https://js.paystack.co/v1/inline.js" async />
         </form>
-      </section>
-    </main>
-  )
+      </div>
+    </section>
+  );
 }

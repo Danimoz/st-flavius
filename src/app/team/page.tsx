@@ -1,38 +1,44 @@
+import PageHero from '@/components/PageHero';
+import kenneth from '@/images/ken.jpg';
 import mcjoe from '@/images/mcjoe.jpeg';
-import tobias from '@/images/toby.jpg'
-import kenneth from '@/images/ken.jpg'
 import paul from '@/images/paul.jpg';
+import tobias from '@/images/toby.jpg';
 import Image from 'next/image';
 
-const staffs = [
-  {img: mcjoe, name: 'Fr. EnimAbasi MacJoe Akpan, MSP', designation: 'Parish Priest'},
-  {img: tobias, name: 'Fr. Tobias Nwafor', designation: 'Priest in Residence'},
-  {img: kenneth, name: 'Mr. Kenneth Unamba', designation: 'Administrative Secretary'},
-  {img: paul, name: 'Mr. Paul Azubuine', designation: 'Parish Catechist'},
-]
+const staff = [
+  { img: mcjoe, name: 'Fr. EnimAbasi MacJoe Akpan, MSP', designation: 'Parish Priest' },
+  { img: tobias, name: 'Fr. Tobias Nwafor', designation: 'Priest in Residence' },
+  { img: kenneth, name: 'Mr. Kenneth Unamba', designation: 'Administrative Secretary' },
+  { img: paul, name: 'Mr. Paul Azubuine', designation: 'Parish Catechist' },
+];
 
-
-export default function Team(){
+export default function Team() {
   return (
-    <main>
-      <section className="py-12 bg-[#847561]">
-        <div className="container mx-auto">
-          <h1 className="text-4xl md:text-6xl italic text-white">Our Team</h1>
-        </div>
-      </section>
-      <section className='py-12 container mx-auto'>
-        <div className='grid grid-cols-1 md:grid-cols-2 md:space-x-6 p-2'>
-          {staffs.map((staff) => (
-            <div key={staff.name} className='md:flex items-center space-x-9 mb-6'>
-              <Image src={staff.img} alt={staff.name} className='rounded-full shadow-lg w-[300px] h-[400px]' width={300} height={300} />
-              <div className='my-4'>
-                <h1 className='text-2xl leading-9 font-semibold hover:text-[#847561]'>{staff.name}</h1>
-                <p className='text-[#847561] text-base mt-4'>{staff.designation}</p>
-              </div>
-            </div>
-          ))}
+    <main className="bg-[#f1eeea] text-[#211d19]">
+      <PageHero
+        eyebrow="Those who serve"
+        title="Meet the parish team."
+        description="Clergy and lay leaders serve together so that worship, formation, and the daily life of the parish can flourish."
+      />
+
+      <section className="px-6 py-16 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-x-8 gap-y-14 md:grid-cols-2">
+            {staff.map((member, index) => (
+              <article key={member.name} className="grid gap-6 border-t border-[#c9a760] pt-6 sm:grid-cols-[190px_1fr] sm:items-center">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-t-[6rem] bg-[#d8cdbd]">
+                  <Image src={member.img} alt={member.name} fill sizes="(min-width: 768px) 190px, 100vw" className="object-cover object-top" priority={index < 2} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#6f2633]">{member.designation}</p>
+                  <h2 className="mt-3 font-ecclesial text-3xl leading-tight sm:text-4xl">{member.name}</h2>
+                  <div aria-hidden="true" className="mt-6 h-px w-16 bg-[#c9a760]" />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </main>
-  )
+  );
 }
