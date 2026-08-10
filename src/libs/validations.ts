@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/** Registration fee in kobo. The server re-checks this against Paystack. */
+export const REGISTRATION_FEE_KOBO = 1000 * 100;
+
 export const ContactFormSchema = z.object({
   name: z.string().min(3, { message: 'Name should have more than 3 characters' }),
   email: z.string().max(0).or(z.string().email()),

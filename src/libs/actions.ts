@@ -3,7 +3,7 @@
 import { IParishioner } from "@/types"
 import Parishioner from "./models"
 import connectToDb from "./mongodb"
-import { ContactFormSchema, ParishionerRegistrationSchema } from "./validations"
+import { ContactFormSchema, ParishionerRegistrationSchema, REGISTRATION_FEE_KOBO } from "./validations"
 import { revalidatePath } from "next/cache"
 import { requireAdminSession } from "./admin-auth"
 import { sendParishEmail } from "./email"
@@ -60,7 +60,34 @@ async function createParishioner(formData: FormData) {
   }
 }
 
-export async function newParishioner(formData: FormData) {
+async function isPaymentVerified(reference: string) {
+  const secretKey = process.env.PAYSTACK_SECRET_KEY
+  if (!secretKey) {
+    console.error('PAYSTACK_SECRET_KEY is not configured')
+    return false
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      { headers: { Authorization: `Bearer ${secretKey}` }, cache: 'no-store' },
+    )
+    if (!response.ok) return false
+
+    const { data } = await response.json()
+    return data?.status === 'success'
+      && data?.currency === 'NGN'
+      && data?.amount >= REGISTRATION_FEE_KOBO
+  } catch (error) {
+    console.error('Paystack verification failed:', error)
+    return false
+  }
+}
+
+export async function newParishioner(formData: FormData, paymentReference: string) {
+  if (!paymentReference || !(await isPaymentVerified(paymentReference))) {
+    return { error: 'We could not verify your payment. Please contact the parish office.' }
+  }
   return createParishioner(formData)
 }
 

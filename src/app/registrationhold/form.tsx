@@ -4,7 +4,7 @@ import ParishionerFormFields from '@/components/ParishionerFormFields';
 import { SubmitButton } from '@/components/SubmitButton';
 import { newParishioner } from '@/libs/actions';
 import Loader from '@/libs/loader';
-import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from '@/libs/validations';
+import { ParishionerRegistrationErrors, ParishionerRegistrationSchema, REGISTRATION_FEE_KOBO } from '@/libs/validations';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -24,23 +24,18 @@ export default function RegistrationForm({ totalParishioners }: { totalParishion
     const handler = PaystackPop.setup({
       key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
       email: data.get('email') as string || data.get('phone') as string + '@stflaviusoworonshoki.com',
-      amount: 1000 * 100,
+      amount: REGISTRATION_FEE_KOBO,
       currency: 'NGN',
       ref: new Date().getTime().toString(),
       callback: function (response: any) {
-        const reference = response.reference;
-        fetch('https://api.paystack.co/transaction/verify/' + reference, {
-          headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY as string },
-        }).then((res: any) => res.json()).then((json: any) => {
-          if (json.status === true) {
-            setIsLoading(true);
-            newParishioner(data).then((res: any) => {
-              if (res.success) {
-                alert('Payment complete! You have been registered');
-                router.push('/registrationhold/' + res.parishionerId);
-                setIsLoading(false);
-              } else alert('Payment complete, but there was an error saving your details. Please contact the parish office.');
-            });
+        setIsLoading(true);
+        // Verification happens server-side; the browser never sees the Paystack secret key.
+        newParishioner(data, response.reference).then((res: any) => {
+          setIsLoading(false);
+          if (res.success) {
+            router.push('/registrationhold/' + res.parishionerId);
+          } else {
+            alert(res.error || 'Payment complete, but there was an error saving your details. Please contact the parish office.');
           }
         });
       },
