@@ -15,7 +15,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false }
 }
 
-export default async function ViewParishioners({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined}}){
+export default async function ViewParishioners(
+  props: { searchParams: Promise<{ [key: string]: string | string[] | undefined}>}
+) {
+  const searchParams = await props.searchParams;
   const page = typeof searchParams.page === 'string' ? Number(searchParams.page) : 1
   const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 40
   const search = typeof searchParams.search === 'string' ? searchParams.search : undefined

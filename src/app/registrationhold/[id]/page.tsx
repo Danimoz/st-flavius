@@ -2,7 +2,8 @@ import { getParishioner }from "@/libs/fetch"
 import { notFound } from "next/navigation"
 import CardImage from "./CardImage"
 
-export default async function CardDetails({ params }: { params: { id: string }}) {
+export default async function CardDetails(props: { params: Promise<{ id: string }>}) {
+  const params = await props.params;
   const result = await getParishioner(params.id)
   if (!result) {
     return notFound()

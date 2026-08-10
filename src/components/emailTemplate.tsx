@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Tailwind } from "@react-email/components";
+import { ReactElement } from "react";
+import { Tailwind } from "react-email";
 
 interface EmailTemplateProps {
   name: string;
@@ -8,7 +8,7 @@ interface EmailTemplateProps {
   message: string;
 }
 
-export const EmailTemplate: FC<Readonly<EmailTemplateProps>> = ({ name, email, phone, message }) => (
+export const EmailTemplate = ({ name, email, phone, message }: Readonly<EmailTemplateProps>): ReactElement => (
   <Tailwind>
     <div className="bg-gray-800 p-3">
       <h1 className="text-xl font-bold text-white">St. Flavius Catholic Church</h1>
