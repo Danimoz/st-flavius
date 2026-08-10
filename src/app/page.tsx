@@ -132,10 +132,10 @@ export default function Home() {
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href="https://www.google.com/maps/search/?api=1&query=St.+Flavius+Catholic+Church+Oworonshoki" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-3 bg-[#c9a760] px-6 py-3 font-bold text-[#181613] hover:bg-[#e3c77f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+              <a href="https://www.google.com/maps/search/?api=1&query=St.+Flavius+Catholic+Church+Oworonshoki" target="_blank" rel="noopener noreferrer" className="btn-press inline-flex min-h-12 items-center justify-center gap-3 bg-[#c9a760] px-6 py-3 font-bold text-[#181613] hover:bg-[#e3c77f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
                 Get directions <FaArrowRight aria-hidden="true" size={13} /><span className="sr-only"> (opens in a new tab)</span>
               </a>
-              <Link href="/contact" className="inline-flex min-h-12 items-center justify-center border border-white/50 px-6 py-3 font-semibold text-white hover:border-white hover:bg-white hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Contact the parish</Link>
+              <Link href="/contact" className="btn-press inline-flex min-h-12 items-center justify-center border border-white/50 px-6 py-3 font-semibold text-white hover:border-white hover:bg-white hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Contact the parish</Link>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function Home() {
             <h2 className="font-ecclesial text-3xl sm:text-4xl">Need help finding your place here?</h2>
             <p className="mt-3 max-w-2xl leading-7 text-[#f2ece2]">The parish office can help with sacrament preparation, joining a society, or arranging a conversation with the parish team.</p>
           </div>
-          <Link href="/contact" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-3 bg-white px-6 py-3 font-bold text-[#6f2633] hover:bg-[#f2ece2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+          <Link href="/contact" className="btn-press inline-flex min-h-12 shrink-0 items-center justify-center gap-3 bg-white px-6 py-3 font-bold text-[#6f2633] hover:bg-[#f2ece2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
             Contact the parish <FaEnvelope aria-hidden="true" />
           </Link>
         </div>

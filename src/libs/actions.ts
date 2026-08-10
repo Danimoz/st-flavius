@@ -23,10 +23,10 @@ export async function handleContact(formData: FormData){
   if (!phone) phone = ''
 
   try {
-    const { data } = await resend.emails.send({
+    await resend.emails.send({
       from: 'St Flavius Catholic Church <onboarding@resend.dev>',
       to: [emailUser],
-      subject: 'New Message from Auto Clems',
+      subject: 'New message from the St. Flavius website',
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
       react: EmailTemplate({ name, email, phone, message })
     });
@@ -42,8 +42,7 @@ async function generateSequentialId() {
   return String(count + 1).padStart(4, '0');
 }
 
-export async function newParishioner(formData: FormData){
-  await requireAdminSession()
+async function createParishioner(formData: FormData) {
   const data = ParishionerRegistrationSchema.safeParse(Object.fromEntries(formData))
   if (!data.success) return { error: data.error.flatten() }
 
@@ -58,12 +57,21 @@ export async function newParishioner(formData: FormData){
     const parishioner = await Parishioner.create({ parishionerId: id, ...data.data })
 
     revalidatePath('/admin/parishioners')
-    revalidatePath('/register')
+    revalidatePath('/registrationhold')
     return { success: true , parishionerId: parishioner._id }
   } catch(error) {
     console.error(error)
     return {error: 'Could not register at this time'}
   }
+}
+
+export async function newParishioner(formData: FormData) {
+  return createParishioner(formData)
+}
+
+export async function registerParishionerByAdmin(formData: FormData) {
+  await requireAdminSession()
+  return createParishioner(formData)
 }
 
 export async function allParishioners(page: number, limit: number, query?: string){

@@ -1,57 +1,50 @@
 import type { ParishionerRegistrationErrors } from '@/libs/validations';
-
-const inputClass = 'mt-2 min-h-12 w-full border border-[#b9aa96] bg-white px-4 py-3 text-[#211d19] outline-none transition-colors placeholder:text-[#8a7b69] focus:border-[#6f2633] focus:ring-2 focus:ring-[#6f2633]/20';
-const labelClass = 'text-sm font-semibold text-[#342d27]';
-
-function FieldError({ errors }: { errors?: string[] }) {
-  if (!errors?.length) return null;
-  return <p className="mt-2 text-sm font-medium text-[#9e1f32]" role="alert">{errors.join(', ')}</p>;
-}
+import { FieldError, formInputClass, formLabelClass } from './FormField';
 
 export default function ParishionerFormFields({ errors }: { errors: ParishionerRegistrationErrors }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label htmlFor="firstName" className={labelClass}>First name <span className="text-[#9e1f32]">*</span></label>
-          <input id="firstName" type="text" placeholder="First name" name="firstName" autoComplete="given-name" className={inputClass} required />
+          <label htmlFor="firstName" className={formLabelClass}>First name <span className="text-[#9e1f32]">*</span></label>
+          <input id="firstName" type="text" placeholder="First name" name="firstName" autoComplete="given-name" className={formInputClass} required />
           <FieldError errors={errors.firstName} />
         </div>
         <div>
-          <label htmlFor="lastName" className={labelClass}>Last name <span className="text-[#9e1f32]">*</span></label>
-          <input id="lastName" type="text" placeholder="Last name" name="lastName" autoComplete="family-name" className={inputClass} required />
+          <label htmlFor="lastName" className={formLabelClass}>Last name <span className="text-[#9e1f32]">*</span></label>
+          <input id="lastName" type="text" placeholder="Last name" name="lastName" autoComplete="family-name" className={formInputClass} required />
           <FieldError errors={errors.lastName} />
         </div>
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         <div>
-          <label htmlFor="dateOfBirth" className={labelClass}>Date of birth <span className="text-[#9e1f32]">*</span></label>
-          <input id="dateOfBirth" type="date" name="dateOfBirth" autoComplete="bday" className={inputClass} required />
+          <label htmlFor="dateOfBirth" className={formLabelClass}>Date of birth <span className="text-[#9e1f32]">*</span></label>
+          <input id="dateOfBirth" type="date" name="dateOfBirth" autoComplete="bday" className={formInputClass} required />
           <FieldError errors={errors.dateOfBirth} />
         </div>
         <div>
-          <label htmlFor="occupation" className={labelClass}>Occupation <span className="text-[#9e1f32]">*</span></label>
-          <input id="occupation" type="text" placeholder="Occupation" name="occupation" className={inputClass} required />
+          <label htmlFor="occupation" className={formLabelClass}>Occupation <span className="text-[#9e1f32]">*</span></label>
+          <input id="occupation" type="text" placeholder="Occupation" name="occupation" className={formInputClass} required />
           <FieldError errors={errors.occupation} />
         </div>
       </div>
 
       <div className="mt-6">
-        <label htmlFor="address" className={labelClass}>Address <span className="text-[#9e1f32]">*</span></label>
-        <input id="address" type="text" placeholder="Home address" name="address" autoComplete="street-address" className={inputClass} required />
+        <label htmlFor="address" className={formLabelClass}>Address <span className="text-[#9e1f32]">*</span></label>
+        <input id="address" type="text" placeholder="Home address" name="address" autoComplete="street-address" className={formInputClass} required />
         <FieldError errors={errors.address} />
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         <div>
-          <label htmlFor="email" className={labelClass}>Email address</label>
-          <input id="email" type="email" placeholder="you@example.com" name="email" autoComplete="email" className={inputClass} />
+          <label htmlFor="email" className={formLabelClass}>Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" name="email" autoComplete="email" className={formInputClass} />
           <FieldError errors={errors.email} />
         </div>
         <div>
-          <label htmlFor="phone" className={labelClass}>Phone number</label>
-          <input id="phone" type="tel" placeholder="Phone or WhatsApp number" name="phone" autoComplete="tel" className={inputClass} />
+          <label htmlFor="phone" className={formLabelClass}>Phone number</label>
+          <input id="phone" type="tel" placeholder="Phone or WhatsApp number" name="phone" autoComplete="tel" className={formInputClass} />
           <FieldError errors={errors.phone} />
         </div>
       </div>

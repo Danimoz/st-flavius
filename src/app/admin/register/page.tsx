@@ -3,7 +3,7 @@
 import PageHero from '@/components/PageHero';
 import ParishionerFormFields from '@/components/ParishionerFormFields';
 import { SubmitButton } from '@/components/SubmitButton';
-import { newParishioner } from '@/libs/actions';
+import { registerParishionerByAdmin } from '@/libs/actions';
 import { ParishionerRegistrationErrors, ParishionerRegistrationSchema } from '@/libs/validations';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -19,7 +19,7 @@ export default function CashRegistration() {
       return;
     }
 
-    const result = await newParishioner(data);
+    const result = await registerParishionerByAdmin(data);
     if (result.success) {
       alert('The parishioner has been registered.');
       router.push('/registrationhold/' + result.parishionerId);

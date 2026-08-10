@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
+  /* Lets block-size transition to and from `auto` for the accordions. */
+  interpolate-size: allow-keywords;
+
   --ink: #211d19;
   --charcoal: #181613;
   --stone-50: #faf9f7;
@@ -12,6 +15,10 @@
   --wine: #6f2633;
   --wine-dark: #4c1822;
   --gold: #c9a760;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 body {
@@ -31,10 +38,97 @@ h1, h2, h3 { text-wrap: balance; }
 
 p { text-wrap: pretty; }
 
+.btn-press {
+  touch-action: manipulation;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+}
+
+.btn-press:active:not(:disabled) { transform: scale(0.98); }
+
+.mobile-nav-panel {
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows 220ms var(--ease-drawer),
+    opacity 160ms var(--ease-out);
+}
+
+.mobile-nav-panel[data-open='true'] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* Browsers without ::details-content support fall back to an instant open. */
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    block-size 200ms var(--ease-out),
+    opacity 160ms var(--ease-out),
+    content-visibility 200ms allow-discrete;
+}
+
+details[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+.enter-rise {
+  transition:
+    opacity 260ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+
+@starting-style {
+  .enter-rise {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.enter-pop {
+  transition:
+    opacity 200ms var(--ease-out) 80ms,
+    transform 200ms var(--ease-out) 80ms;
+}
+
+@starting-style {
+  .enter-pop {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+.enter-tile {
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+@starting-style {
+  .enter-tile {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* Reduced motion keeps the fades but drops every movement. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    transition-duration: 0.01ms !important;
+    transition-duration: 120ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .btn-press:active:not(:disabled) { transform: none; }
+
+  @starting-style {
+    .enter-rise, .enter-pop, .enter-tile { transform: none; }
   }
 }

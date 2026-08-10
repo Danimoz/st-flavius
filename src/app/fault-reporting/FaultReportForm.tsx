@@ -7,23 +7,16 @@ import {
   faultSeverities,
   safetyRisks,
 } from '@/libs/validations';
+import { FieldError, formInputClass, formLabelClass } from '@/components/FormField';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { FaCamera, FaCheck, FaFileVideo, FaTrashCan, FaTriangleExclamation } from 'react-icons/fa6';
 import { initialFaultReportState, submitFaultReport } from './actions';
 
-const inputClass = 'mt-2 min-h-12 w-full border border-[#b9aa96] bg-white px-4 py-3 text-[#211d19] outline-none transition-colors placeholder:text-[#8a7b69] focus:border-[#6f2633] focus:ring-2 focus:ring-[#6f2633]/20';
-const labelClass = 'text-sm font-semibold text-[#342d27]';
-
 type Preview = {
   file: File;
   url: string;
 };
-
-function FieldError({ errors }: { errors?: string[] }) {
-  if (!errors?.length) return null;
-  return <p className="mt-2 text-sm font-medium text-[#9e1f32]" role="alert">{errors.join(' ')}</p>;
-}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -32,7 +25,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex min-h-14 w-full items-center justify-center bg-[#6f2633] px-8 py-4 text-base font-bold text-white transition-colors hover:bg-[#4c1822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+      className="btn-press inline-flex min-h-14 w-full items-center justify-center bg-[#6f2633] px-8 py-4 text-base font-bold text-white hover:bg-[#4c1822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
     >
       {pending ? 'Delivering report…' : 'Send fault report'}
     </button>
@@ -89,13 +82,13 @@ export default function FaultReportForm() {
 
   if (state.status === 'success') {
     return (
-      <section className="border border-[#527052] bg-[#edf5ea] px-6 py-12 text-center text-[#244224] sm:px-10">
-        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#527052]">
+      <section className="enter-rise border border-[#527052] bg-[#edf5ea] px-6 py-12 text-center text-[#244224] sm:px-10">
+        <span className="enter-pop mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#527052]">
           <FaCheck aria-hidden="true" size={22} />
         </span>
         <h2 className="mt-6 font-ecclesial text-3xl">Report delivered</h2>
         <p className="mx-auto mt-3 max-w-xl leading-7">{state.message}</p>
-        <a href="/fault-reporting" className="mt-7 inline-flex min-h-11 items-center justify-center border border-[#527052] px-5 py-3 text-sm font-semibold hover:bg-[#527052] hover:text-white">
+        <a href="/fault-reporting" className="btn-press mt-7 inline-flex min-h-11 items-center justify-center border border-[#527052] px-5 py-3 text-sm font-semibold hover:bg-[#527052] hover:text-white">
           Submit another report
         </a>
       </section>
@@ -113,26 +106,26 @@ export default function FaultReportForm() {
         <SectionHeading number="I" title="Reporter information" note="These details help the parish maintenance team contact you for clarification or an update." />
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <label className={labelClass} htmlFor="fullName">Full name <span className="text-[#9e1f32]">*</span></label>
-            <input className={inputClass} id="fullName" name="fullName" autoComplete="name" placeholder="Your first and last name" required />
+            <label className={formLabelClass} htmlFor="fullName">Full name <span className="text-[#9e1f32]">*</span></label>
+            <input className={formInputClass} id="fullName" name="fullName" autoComplete="name" placeholder="Your first and last name" required />
             <FieldError errors={errors?.fullName} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="phone">Phone number <span className="text-[#9e1f32]">*</span></label>
-            <input className={inputClass} id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="WhatsApp preferred" required />
+            <label className={formLabelClass} htmlFor="phone">Phone number <span className="text-[#9e1f32]">*</span></label>
+            <input className={formInputClass} id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="WhatsApp preferred" required />
             <FieldError errors={errors?.phone} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="role">Role / affiliation <span className="text-[#9e1f32]">*</span></label>
-            <select className={inputClass} id="role" name="role" defaultValue="" required>
+            <label className={formLabelClass} htmlFor="role">Role / affiliation <span className="text-[#9e1f32]">*</span></label>
+            <select className={formInputClass} id="role" name="role" defaultValue="" required>
               <option value="" disabled>Select one</option>
               {faultRoles.map((role) => <option key={role}>{role}</option>)}
             </select>
             <FieldError errors={errors?.role} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="organisation">Society / organisation name <span className="font-normal text-[#6f6254]">(optional)</span></label>
-            <input className={inputClass} id="organisation" name="organisation" placeholder="e.g. CWO, CMO, CYON, Choir" />
+            <label className={formLabelClass} htmlFor="organisation">Society / organisation name <span className="font-normal text-[#6f6254]">(optional)</span></label>
+            <input className={formInputClass} id="organisation" name="organisation" placeholder="e.g. CWO, CMO, CYON, Choir" />
             <FieldError errors={errors?.organisation} />
           </div>
         </div>
@@ -142,29 +135,29 @@ export default function FaultReportForm() {
         <SectionHeading number="II" title="Location & asset" note="Tell us where the problem is and what equipment or part of the building is affected." />
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <label className={labelClass} htmlFor="observedAt">Date &amp; time observed <span className="text-[#9e1f32]">*</span></label>
-            <input className={inputClass} id="observedAt" name="observedAt" type="datetime-local" required />
+            <label className={formLabelClass} htmlFor="observedAt">Date &amp; time observed <span className="text-[#9e1f32]">*</span></label>
+            <input className={formInputClass} id="observedAt" name="observedAt" type="datetime-local" required />
             <FieldError errors={errors?.observedAt} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="location">Fault location <span className="text-[#9e1f32]">*</span></label>
-            <select className={inputClass} id="location" name="location" defaultValue="" required>
+            <label className={formLabelClass} htmlFor="location">Fault location <span className="text-[#9e1f32]">*</span></label>
+            <select className={formInputClass} id="location" name="location" defaultValue="" required>
               <option value="" disabled>Select the area</option>
               {faultLocations.map((location) => <option key={location}>{location}</option>)}
             </select>
             <FieldError errors={errors?.location} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="category">Category of fault <span className="text-[#9e1f32]">*</span></label>
-            <select className={inputClass} id="category" name="category" defaultValue="" required>
+            <label className={formLabelClass} htmlFor="category">Category of fault <span className="text-[#9e1f32]">*</span></label>
+            <select className={formInputClass} id="category" name="category" defaultValue="" required>
               <option value="" disabled>Select a category</option>
               {faultCategories.map((category) => <option key={category}>{category}</option>)}
             </select>
             <FieldError errors={errors?.category} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="equipment">Specific equipment / item <span className="font-normal text-[#6f6254]">(optional)</span></label>
-            <input className={inputClass} id="equipment" name="equipment" placeholder="e.g. Altar wireless mic 2" />
+            <label className={formLabelClass} htmlFor="equipment">Specific equipment / item <span className="font-normal text-[#6f6254]">(optional)</span></label>
+            <input className={formInputClass} id="equipment" name="equipment" placeholder="e.g. Altar wireless mic 2" />
             <FieldError errors={errors?.equipment} />
           </div>
         </div>
@@ -174,18 +167,18 @@ export default function FaultReportForm() {
         <SectionHeading number="III" title="Description & urgency" note="Describe what you observed and help us understand how quickly the fault needs attention." />
         <div className="space-y-6">
           <div>
-            <label className={labelClass} htmlFor="briefSummary">Brief summary <span className="text-[#9e1f32]">*</span></label>
-            <input className={inputClass} id="briefSummary" name="briefSummary" maxLength={160} placeholder="e.g. Roof leak above the choir gallery" required />
+            <label className={formLabelClass} htmlFor="briefSummary">Brief summary <span className="text-[#9e1f32]">*</span></label>
+            <input className={formInputClass} id="briefSummary" name="briefSummary" maxLength={160} placeholder="e.g. Roof leak above the choir gallery" required />
             <FieldError errors={errors?.briefSummary} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="description">Detailed fault description <span className="text-[#9e1f32]">*</span></label>
-            <textarea className={inputClass} id="description" name="description" rows={6} maxLength={4000} placeholder="What went wrong? Include any noise, smell, spark, leak, or when the problem first started." required />
+            <label className={formLabelClass} htmlFor="description">Detailed fault description <span className="text-[#9e1f32]">*</span></label>
+            <textarea className={formInputClass} id="description" name="description" rows={6} maxLength={4000} placeholder="What went wrong? Include any noise, smell, spark, leak, or when the problem first started." required />
             <FieldError errors={errors?.description} />
           </div>
 
           <fieldset>
-            <legend className={labelClass}>Severity / urgency level <span className="text-[#9e1f32]">*</span></legend>
+            <legend className={formLabelClass}>Severity / urgency level <span className="text-[#9e1f32]">*</span></legend>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               {faultSeverities.map((severity) => (
                 <label key={severity} className="flex cursor-pointer items-start gap-3 border border-[#d8cdbd] bg-white p-4 has-[:checked]:border-[#6f2633] has-[:checked]:bg-[#f8eef0]">
@@ -206,7 +199,7 @@ export default function FaultReportForm() {
           </fieldset>
 
           <fieldset>
-            <legend className={labelClass}>Immediate safety risk present? <span className="text-[#9e1f32]">*</span></legend>
+            <legend className={formLabelClass}>Immediate safety risk present? <span className="text-[#9e1f32]">*</span></legend>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               {safetyRisks.map((risk) => (
                 <label key={risk} className="flex cursor-pointer items-center gap-3 border border-[#d8cdbd] bg-white px-4 py-3 has-[:checked]:border-[#6f2633] has-[:checked]:bg-[#f8eef0]">
@@ -241,7 +234,11 @@ export default function FaultReportForm() {
         {previews.length > 0 && (
           <ul className="mt-5 grid gap-4 sm:grid-cols-3" aria-label="Selected evidence">
             {previews.map((preview, index) => (
-              <li key={`${preview.file.name}-${preview.file.lastModified}`} className="relative overflow-hidden border border-[#d8cdbd] bg-white">
+              <li
+                key={`${preview.file.name}-${preview.file.lastModified}`}
+                style={{ transitionDelay: `${index * 40}ms` }}
+                className="enter-tile relative overflow-hidden border border-[#d8cdbd] bg-white"
+              >
                 {preview.file.type.startsWith('image/') ? (
                   // Blob previews are local-only and do not need Next Image optimisation.
                   // eslint-disable-next-line @next/next/no-img-element

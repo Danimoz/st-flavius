@@ -29,7 +29,7 @@ export default function ParishionersSearch({ search }: { search?: string }) {
           id="parishioner-search"
           type="search"
           placeholder="Search by parishioner details"
-          className="min-h-12 w-full border border-[#b9aa96] bg-[#fffdf9] py-3 pl-11 pr-4 outline-none placeholder:text-[#8a7b69] focus:border-[#6f2633] focus:ring-2 focus:ring-[#6f2633]/20"
+          className="min-h-12 w-full border border-[#b9aa96] bg-[#fffdf9] py-3 pl-11 pr-4 outline-none placeholder:text-[#6f6254] focus:border-[#6f2633] focus:ring-2 focus:ring-[#6f2633]/20"
           value={searchText}
           onChange={(event) => setSearchText(event.target.value)}
         />

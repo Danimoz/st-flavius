@@ -50,7 +50,7 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
-          <Link href="/fault-reporting" className="ml-3 inline-flex min-h-11 items-center border border-[#6f2633] px-4 text-sm font-bold text-[#6f2633] transition-colors hover:bg-[#6f2633] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+          <Link href="/fault-reporting" className="btn-press ml-3 inline-flex min-h-11 items-center border border-[#6f2633] px-4 text-sm font-bold text-[#6f2633] hover:bg-[#6f2633] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
             Report a fault
           </Link>
         </div>
@@ -67,14 +67,14 @@ export default function Navbar() {
         </button>
       </nav>
 
-      <div id="mobile-navigation" className={isMenuOpen ? 'border-t border-[#d8cdbd] bg-[#fffdf9] lg:hidden' : 'hidden'}>
-        <nav aria-label="Mobile navigation" className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+      <div id="mobile-navigation" data-open={isMenuOpen} inert={!isMenuOpen} className="mobile-nav-panel grid bg-[#fffdf9] lg:hidden">
+        <nav aria-label="Mobile navigation" className="mx-auto w-full max-w-7xl border-t border-[#d8cdbd] px-4 py-4 sm:px-6">
           {navigation.map((item) => (
             <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="flex min-h-12 items-center border-b border-[#e6ded3] py-3 font-semibold text-[#342d27] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6f2633]">
               {item.name}
             </Link>
           ))}
-          <Link href="/fault-reporting" onClick={() => setIsMenuOpen(false)} className="mt-4 flex min-h-12 items-center justify-center bg-[#6f2633] px-5 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+          <Link href="/fault-reporting" onClick={() => setIsMenuOpen(false)} className="btn-press mt-4 flex min-h-12 items-center justify-center bg-[#6f2633] px-5 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
             Report a facility fault
           </Link>
         </nav>

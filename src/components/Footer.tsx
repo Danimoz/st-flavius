@@ -50,7 +50,7 @@ export default function Footer() {
               <FaEnvelope aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" />
               stflavius9@gmail.com
             </Link>
-            <Link href="/fault-reporting" className="mt-7 inline-flex min-h-11 items-center justify-center border border-[#c9a760] px-5 py-3 text-sm font-semibold text-[#f5e5b9] transition-colors hover:bg-[#c9a760] hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            <Link href="/fault-reporting" className="btn-press mt-7 inline-flex min-h-11 items-center justify-center border border-[#c9a760] px-5 py-3 text-sm font-semibold text-[#f5e5b9] hover:bg-[#c9a760] hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
               Facility fault reporting
             </Link>
           </div>

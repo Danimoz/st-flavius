@@ -31,10 +31,10 @@ export default function Hero() {
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link href="/#mass-times" className="inline-flex min-h-12 items-center justify-center gap-3 bg-[#c9a760] px-6 py-3 font-bold text-[#181613] transition-colors hover:bg-[#e3c77f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            <Link href="/#mass-times" className="btn-press inline-flex min-h-12 items-center justify-center gap-3 bg-[#c9a760] px-6 py-3 font-bold text-[#181613] hover:bg-[#e3c77f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
               View Mass times <FaArrowRight aria-hidden="true" size={13} />
             </Link>
-            <Link href="/#visit" className="inline-flex min-h-12 items-center justify-center border border-white/60 px-6 py-3 font-semibold text-white transition-colors hover:border-white hover:bg-white hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            <Link href="/#visit" className="btn-press inline-flex min-h-12 items-center justify-center border border-white/60 px-6 py-3 font-semibold text-white hover:border-white hover:bg-white hover:text-[#181613] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
               Plan your visit
             </Link>
           </div>

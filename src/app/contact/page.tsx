@@ -1,23 +1,34 @@
 'use client';
 
 import { SubmitButton } from '@/components/SubmitButton';
+import { FieldError, formInputClass, formLabelClass } from '@/components/FormField';
 import ask from '@/images/question.jpg';
 import contactPrayer from '@/images/contactprayer.jpg';
 import { handleContact } from '@/libs/actions';
 import { ContactFormErrors } from '@/libs/validations';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaClock, FaEnvelope, FaLocationDot } from 'react-icons/fa6';
-
-const inputClass = 'mt-2 min-h-12 w-full border border-[#b9aa96] bg-white px-4 py-3 text-[#211d19] outline-none transition-colors placeholder:text-[#8a7b69] focus:border-[#6f2633] focus:ring-2 focus:ring-[#6f2633]/20';
-const labelClass = 'text-sm font-semibold text-[#342d27]';
 
 export default function Contact() {
   const [validationError, setValidationError] = useState<ContactFormErrors>({});
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function action(data: FormData) {
     const result = await handleContact(data);
-    if (result?.error?.fieldErrors) setValidationError(result.error.fieldErrors);
+    if (result?.error?.fieldErrors) {
+      setValidationError(result.error.fieldErrors);
+      setSubmissionStatus('idle');
+      return;
+    }
+    setValidationError({});
+    if (result?.success) {
+      setSubmissionStatus('success');
+      formRef.current?.reset();
+    } else {
+      setSubmissionStatus('error');
+    }
   }
 
   return (
@@ -67,35 +78,38 @@ export default function Contact() {
             <div className="absolute inset-0 bg-[#181613]/25" />
           </div>
 
-          <form action={action} className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_18px_50px_rgba(55,43,30,0.08)] sm:p-10">
+          <form ref={formRef} action={action} className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_18px_50px_rgba(55,43,30,0.08)] sm:p-10">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6f2633]">Send a message</p>
             <h2 className="mt-3 font-ecclesial text-4xl sm:text-5xl">Ask a question.</h2>
             <p className="mb-8 mt-4 max-w-2xl leading-7 text-[#6f6254]">Share enough detail for the parish office to understand what you need. Fields marked with an asterisk are required.</p>
 
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="name" className={labelClass}>Name <span className="text-[#9e1f32]">*</span></label>
-                <input id="name" type="text" placeholder="Your full name" name="name" autoComplete="name" className={inputClass} required />
-                <p className="mt-2 text-sm text-[#9e1f32]" role="alert">{validationError.name?.join(', ')}</p>
+                <label htmlFor="name" className={formLabelClass}>Name <span className="text-[#9e1f32]">*</span></label>
+                <input id="name" type="text" placeholder="Your full name" name="name" autoComplete="name" className={formInputClass} required />
+                <FieldError errors={validationError.name} />
               </div>
               <div>
-                <label htmlFor="email" className={labelClass}>Email address</label>
-                <input id="email" type="email" name="email" placeholder="you@example.com" autoComplete="email" className={inputClass} />
-                <p className="mt-2 text-sm text-[#9e1f32]" role="alert">{validationError.email?.join(', ')}</p>
+                <label htmlFor="email" className={formLabelClass}>Email address</label>
+                <input id="email" type="email" name="email" placeholder="you@example.com" autoComplete="email" className={formInputClass} />
+                <FieldError errors={validationError.email} />
               </div>
             </div>
 
             <div className="mt-6">
-              <label htmlFor="phone" className={labelClass}>Phone number</label>
-              <input id="phone" type="tel" name="phone" placeholder="Your phone or WhatsApp number" autoComplete="tel" className={inputClass} />
-              <p className="mt-2 text-sm text-[#9e1f32]" role="alert">{validationError.phone?.join(', ')}</p>
+              <label htmlFor="phone" className={formLabelClass}>Phone number</label>
+              <input id="phone" type="tel" name="phone" placeholder="Your phone or WhatsApp number" autoComplete="tel" className={formInputClass} />
+              <FieldError errors={validationError.phone} />
             </div>
 
             <div className="mt-6">
-              <label htmlFor="message" className={labelClass}>Message <span className="text-[#9e1f32]">*</span></label>
-              <textarea id="message" rows={7} name="message" placeholder="How can the parish team help?" className={inputClass} required />
-              <p className="mt-2 text-sm text-[#9e1f32]" role="alert">{validationError.message?.join(', ')}</p>
+              <label htmlFor="message" className={formLabelClass}>Message <span className="text-[#9e1f32]">*</span></label>
+              <textarea id="message" rows={7} name="message" placeholder="How can the parish team help?" className={formInputClass} required />
+              <FieldError errors={validationError.message} />
             </div>
+
+            {submissionStatus === 'success' && <p className="mt-7 border border-[#527052] bg-[#edf5ea] px-5 py-4 text-sm font-medium text-[#244224]" role="status">Your message has been sent to the parish office. Thank you—we will respond using the contact details you provided.</p>}
+            {submissionStatus === 'error' && <p className="mt-7 border border-[#b75966] bg-[#fff0f2] px-5 py-4 text-sm font-medium text-[#7f1728]" role="alert">Your message could not be sent. Please try again, or email stflavius9@gmail.com directly.</p>}
 
             <div className="mt-8"><SubmitButton buttonText="Send message" /></div>
           </form>
