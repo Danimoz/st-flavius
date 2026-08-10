@@ -68,16 +68,19 @@ export default function Navbar() {
       </nav>
 
       <div id="mobile-navigation" data-open={isMenuOpen} inert={!isMenuOpen} className="mobile-nav-panel grid bg-[#fffdf9] lg:hidden">
-        <nav aria-label="Mobile navigation" className="mx-auto w-full max-w-7xl border-t border-[#d8cdbd] px-4 py-4 sm:px-6">
-          {navigation.map((item) => (
-            <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="flex min-h-12 items-center border-b border-[#e6ded3] py-3 font-semibold text-[#342d27] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6f2633]">
-              {item.name}
+        {/* Unpadded wrapper so the 0fr track can actually collapse to zero. */}
+        <div className="min-h-0 overflow-hidden">
+          <nav aria-label="Mobile navigation" className="mx-auto w-full max-w-7xl border-t border-[#d8cdbd] px-4 py-4 sm:px-6">
+            {navigation.map((item) => (
+              <Link key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="flex min-h-12 items-center border-b border-[#e6ded3] py-3 font-semibold text-[#342d27] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6f2633]">
+                {item.name}
+              </Link>
+            ))}
+            <Link href="/fault-reporting" onClick={() => setIsMenuOpen(false)} className="btn-press mt-4 flex min-h-12 items-center justify-center bg-[#6f2633] px-5 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
+              Report a facility fault
             </Link>
-          ))}
-          <Link href="/fault-reporting" onClick={() => setIsMenuOpen(false)} className="btn-press mt-4 flex min-h-12 items-center justify-center bg-[#6f2633] px-5 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">
-            Report a facility fault
-          </Link>
-        </nav>
+          </nav>
+        </div>
       </div>
     </header>
   );

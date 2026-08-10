@@ -5,9 +5,8 @@ import Parishioner from "./models"
 import connectToDb from "./mongodb"
 import { ContactFormSchema, ParishionerRegistrationSchema } from "./validations"
 import { revalidatePath } from "next/cache"
-import { Resend } from "resend"
-import { EmailTemplate } from "@/components/emailTemplate"
 import { requireAdminSession } from "./admin-auth"
+import { sendParishEmail } from "./email"
 
 export async function handleContact(formData: FormData){
   const validata = ContactFormSchema.safeParse(Object.fromEntries(formData))
@@ -16,22 +15,18 @@ export async function handleContact(formData: FormData){
     return { error: validata.error.flatten() }
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY as string)
-  const emailUser = process.env.EMAIL_USERNAME as string;
-
   let { name, email, message, phone } = validata.data
   if (!phone) phone = ''
 
   try {
-    await resend.emails.send({
-      from: 'St Flavius Catholic Church <onboarding@resend.dev>',
-      to: [emailUser],
+    await sendParishEmail({
       subject: 'New message from the St. Flavius website',
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
-      react: EmailTemplate({ name, email, phone, message })
+      replyTo: email || undefined,
     });
     return { success: true };
   } catch (error) {
+    console.error('Contact form Gmail delivery failed:', error)
     return { success: false };
   }
   

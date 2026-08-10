@@ -1,8 +1,8 @@
 'use server';
 
-import { FaultReportEmail } from '@/components/FaultReportEmail';
-import { FaultReportSchema, type FaultReportErrors } from '@/libs/validations';
-import { Resend } from 'resend';
+import { sendParishEmail } from '@/libs/email';
+import { FaultReportSchema } from '@/libs/validations';
+import type { FaultReportState } from './state';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const MAX_FILES = 3;
@@ -16,17 +16,6 @@ const ALLOWED_FILE_TYPES = new Set([
   'video/quicktime',
   'video/webm',
 ]);
-
-export type FaultReportState = {
-  status: 'idle' | 'error' | 'success';
-  message: string;
-  errors?: FaultReportErrors;
-};
-
-export const initialFaultReportState: FaultReportState = {
-  status: 'idle',
-  message: '',
-};
 
 function asString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -98,20 +87,11 @@ export async function submitFaultReport(
     };
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const recipient = process.env.EMAIL_USERNAME;
-  if (!apiKey || !recipient) {
-    console.error('Fault reporting email is not configured: RESEND_API_KEY or EMAIL_USERNAME is missing.');
-    return {
-      status: 'error',
-      message: 'Email delivery is not configured yet. Please contact the parish office directly.',
-    };
-  }
-
   try {
     const attachments = await Promise.all(evidence.map(async (file) => ({
       filename: file.name,
       content: Buffer.from(await file.arrayBuffer()),
+      contentType: file.type,
     })));
 
     const report = parsed.data;
@@ -133,20 +113,11 @@ export async function submitFaultReport(
       `Evidence: ${evidence.length ? evidence.map((file) => file.name).join(', ') : 'None'}`,
     ].join('\n');
 
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'St. Flavius Catholic Church <onboarding@resend.dev>',
-      to: [recipient],
+    await sendParishEmail({
       subject: `[${report.severity.toUpperCase()}] Fault report: ${report.briefSummary.slice(0, 80)}`,
       text,
-      react: FaultReportEmail({ ...report, attachmentNames: evidence.map((file) => file.name) }),
       attachments,
     });
-
-    if (error) {
-      console.error('Resend rejected a fault report email:', error);
-      return { status: 'error', message: 'We could not deliver the report. Please try again or contact the parish office.' };
-    }
 
     return {
       status: 'success',

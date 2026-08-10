@@ -8,10 +8,11 @@ import {
   safetyRisks,
 } from '@/libs/validations';
 import { FieldError, formInputClass, formLabelClass } from '@/components/FormField';
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useActionState, useCallback, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { FaCamera, FaCheck, FaFileVideo, FaTrashCan, FaTriangleExclamation } from 'react-icons/fa6';
-import { initialFaultReportState, submitFaultReport } from './actions';
+import { submitFaultReport } from './actions';
+import { initialFaultReportState, type FaultReportState } from './state';
 
 type Preview = {
   file: File;
@@ -45,10 +46,15 @@ function SectionHeading({ number, title, note }: { number: string; title: string
 }
 
 export default function FaultReportForm() {
-  const [state, formAction] = useActionState(submitFaultReport, initialFaultReportState);
   const [previews, setPreviews] = useState<Preview[]>([]);
   const [clientFileError, setClientFileError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const submitWithEvidence = useCallback(async (previousState: FaultReportState, formData: FormData) => {
+    formData.delete('evidence');
+    previews.forEach(({ file }) => formData.append('evidence', file, file.name));
+    return submitFaultReport(previousState, formData);
+  }, [previews]);
+  const [state, formAction] = useActionState(submitWithEvidence, initialFaultReportState);
 
   useEffect(() => () => {
     previews.forEach((preview) => URL.revokeObjectURL(preview.url));
@@ -66,16 +72,12 @@ export default function FaultReportForm() {
     );
 
     setPreviews(accepted.map((file) => ({ file, url: URL.createObjectURL(file) })));
-
-    if (fileInputRef.current) {
-      const transfer = new DataTransfer();
-      accepted.forEach((file) => transfer.items.add(file));
-      fileInputRef.current.files = transfer.files;
-    }
   }
 
-  function removeFile(index: number) {
-    updateFiles(previews.filter((_, previewIndex) => previewIndex !== index).map((preview) => preview.file));
+  function clearFiles() {
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    setPreviews([]);
+    setClientFileError('');
   }
 
   const errors = state.errors;
@@ -102,7 +104,7 @@ export default function FaultReportForm() {
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <section id="reporter" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
+      <section id="reporter-section" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
         <SectionHeading number="I" title="Reporter information" note="These details help the parish maintenance team contact you for clarification or an update." />
         <div className="grid gap-6 md:grid-cols-2">
           <div>
@@ -131,7 +133,7 @@ export default function FaultReportForm() {
         </div>
       </section>
 
-      <section id="location" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
+      <section id="location-section" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
         <SectionHeading number="II" title="Location & asset" note="Tell us where the problem is and what equipment or part of the building is affected." />
         <div className="grid gap-6 md:grid-cols-2">
           <div>
@@ -163,7 +165,7 @@ export default function FaultReportForm() {
         </div>
       </section>
 
-      <section id="details" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
+      <section id="details-section" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
         <SectionHeading number="III" title="Description & urgency" note="Describe what you observed and help us understand how quickly the fault needs attention." />
         <div className="space-y-6">
           <div>
@@ -213,9 +215,9 @@ export default function FaultReportForm() {
         </div>
       </section>
 
-      <section id="evidence" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
+      <section id="evidence-section" className="border border-[#d8cdbd] bg-[#fffdf9] p-6 shadow-[0_14px_38px_rgba(55,43,30,0.07)] sm:p-9">
         <SectionHeading number="IV" title="Photo / video evidence" note="Evidence is optional, but a clear photo can help the team assess the fault before arriving." />
-        <label htmlFor="evidence" className="flex cursor-pointer flex-col items-center justify-center border border-dashed border-[#8a7b69] bg-[#faf7f1] px-6 py-10 text-center transition-colors hover:border-[#6f2633] hover:bg-[#f8eef0] focus-within:border-[#6f2633] focus-within:ring-2 focus-within:ring-[#6f2633]/20">
+        <label htmlFor="evidence" className="relative flex min-h-48 cursor-pointer flex-col items-center justify-center overflow-hidden border border-dashed border-[#8a7b69] bg-[#faf7f1] px-6 py-10 text-center transition-colors hover:border-[#6f2633] hover:bg-[#f8eef0] focus-within:border-[#6f2633] focus-within:ring-2 focus-within:ring-[#6f2633]/20">
           <FaCamera aria-hidden="true" className="mb-4 text-[#6f2633]" size={30} />
           <span className="font-semibold text-[#342d27]">Choose up to 3 photos or short videos</span>
           <span className="mt-2 text-sm text-[#6f6254]">JPG, PNG, WebP, HEIC, MP4, MOV, or WebM · 10 MB each</span>
@@ -226,7 +228,7 @@ export default function FaultReportForm() {
             type="file"
             accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,video/webm"
             multiple
-            className="sr-only"
+            className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
             onChange={(event) => updateFiles(Array.from(event.currentTarget.files || []))}
           />
         </label>
@@ -248,13 +250,15 @@ export default function FaultReportForm() {
                 )}
                 <div className="flex items-center justify-between gap-2 p-3">
                   <span className="min-w-0 truncate text-xs text-[#4e443a]">{preview.file.name}</span>
-                  <button type="button" onClick={() => removeFile(index)} className="shrink-0 p-2 text-[#6f2633] hover:bg-[#f8eef0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#6f2633]" aria-label={`Remove ${preview.file.name}`}>
-                    <FaTrashCan aria-hidden="true" size={13} />
-                  </button>
                 </div>
               </li>
             ))}
           </ul>
+        )}
+        {previews.length > 0 && (
+          <button type="button" onClick={clearFiles} className="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f2633]">
+            <FaTrashCan aria-hidden="true" size={13} /> Clear selected files
+          </button>
         )}
         {clientFileError && <p className="mt-3 text-sm font-medium text-[#9e1f32]" role="alert">{clientFileError}</p>}
         <FieldError errors={errors?.evidence} />
