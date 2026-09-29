@@ -27,6 +27,7 @@ export default function Footer() {
             <ul className="text-sm">
               <li><Link className="inline-flex min-h-[44px] min-w-[44px] items-center hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c9a760]" href="/">Home</Link></li>
               <li><Link className="inline-flex min-h-[44px] min-w-[44px] items-center hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c9a760]" href="/team">Our Team</Link></li>
+              <li><Link className="inline-flex min-h-[44px] min-w-[44px] items-center hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c9a760]" href="/catechesis">Catechesis</Link></li>
               <li><Link className="inline-flex min-h-[44px] min-w-[44px] items-center hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c9a760]" href="/contact">Contact Us</Link></li>
               <li><Link className="inline-flex min-h-[44px] min-w-[44px] items-center gap-2 text-[#e3c77f] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c9a760]" href="/fault-reporting">Report a fault <FaArrowRight aria-hidden="true" size={11} /></Link></li>
             </ul>

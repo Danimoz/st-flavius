@@ -126,9 +126,26 @@ export default function Home() {
               Come as you are. Our church is on Akerele Street in Oworonshoki, and parishioners are available to help you find a seat or answer questions before Mass.
             </p>
 
-            <div className="mt-9 space-y-5 border-y border-white/20 py-7 text-sm text-[#f2ece2]">
+            <div className="mt-9 space-y-6 border-y border-white/20 py-7 text-sm text-[#f2ece2]">
               <p className="flex items-start gap-4"><FaLocationDot aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" /><span><strong className="block text-white">St. Flavius Catholic Church</strong>2 Akerele Street, Oworonshoki, Lagos</span></p>
-              <p className="flex items-start gap-4"><FaClock aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" /><span><strong className="block text-white">Parish office</strong>Monday, Tuesday, Wednesday &amp; Friday · 9:00 AM–2:00 PM</span></p>
+              <div className="flex items-start gap-4">
+                <FaClock aria-hidden="true" className="mt-1 shrink-0 text-[#c9a760]" />
+                <dl className="min-w-0 flex-1 divide-y divide-white/15">
+                  <div className="pb-4">
+                    <dt className="font-bold text-white">Parish office</dt>
+                    <dd className="mt-1 leading-6">Monday, Tuesday, Wednesday &amp; Friday · 9:00 AM–2:00 PM</dd>
+                  </div>
+                  <div className="py-4">
+                    <dt className="font-bold text-white">Secretary&apos;s office</dt>
+                    <dd className="mt-1 leading-6">Monday–Friday · 9:00 AM–4:00 PM</dd>
+                  </div>
+                  <div className="pt-4">
+                    <dt className="font-bold text-white">Parish priest&apos;s office</dt>
+                    <dd className="mt-1 leading-6">Tuesdays &amp; Wednesdays · 9:00 AM–12 noon</dd>
+                    <dd className="leading-6">Fridays · by appointment</dd>
+                  </div>
+                </dl>
+              </div>
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -151,6 +168,7 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
                 <Link href="/team" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">Meet our parish team <FaArrowRight aria-hidden="true" size={12} /></Link>
+                <Link href="/catechesis" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">Explore catechesis <FaArrowRight aria-hidden="true" size={12} /></Link>
                 <Link href="/fault-reporting" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4">Report a facility fault <FaArrowRight aria-hidden="true" size={12} /></Link>
               </div>
             </div>

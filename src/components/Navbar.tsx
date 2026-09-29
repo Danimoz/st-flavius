@@ -7,6 +7,7 @@ import { FaBars, FaCross, FaXmark } from 'react-icons/fa6';
 const navigation = [
   { name: 'Mass & Sacraments', href: '/#mass-times' },
   { name: 'Parish Life', href: '/#parish-life' },
+  { name: 'Catechesis', href: '/catechesis' },
   { name: 'Plan a Visit', href: '/#visit' },
   { name: 'Contact', href: '/contact' },
 ];
