@@ -37,7 +37,7 @@ export default async function ViewParishioners(props: { searchParams: Promise<{ 
                 <caption className="sr-only">Registered parishioners</caption>
                 <thead className="bg-[#211d19] text-[#f2ece2]">
                   <tr>
-                    {['ID', 'Name', 'Contact', 'Address', 'Occupation', 'Date of birth', 'Baptized', 'Confirmed', 'Communicant', 'Married'].map((heading) => (
+                    {['ID', 'Name', 'Actions', 'Contact', 'Address', 'Occupation', 'Date of birth', 'Baptized', 'Confirmed', 'Communicant', 'Married'].map((heading) => (
                       <th key={heading} scope="col" className="px-4 py-4 text-xs font-bold uppercase tracking-[0.12em]">{heading}</th>
                     ))}
                   </tr>
@@ -47,6 +47,9 @@ export default async function ViewParishioners(props: { searchParams: Promise<{ 
                     <tr key={parishioner.parishionerId} className={`border-b border-[#e3dbd1] ${index % 2 === 0 ? 'bg-[#fffdf9]' : 'bg-[#f6f2ed]'}`}>
                       <td className="px-4 py-4 font-semibold text-[#6f2633]">{parishioner.parishionerId}</td>
                       <td className="px-4 py-4 font-semibold">{parishioner.firstName} {parishioner.lastName}</td>
+                      <td className="px-4 py-4">
+                        <Link href={`/admin/parishioners/${parishioner._id.toString()}/edit`} aria-label={`Edit details for ${parishioner.firstName} ${parishioner.lastName}`} className="inline-flex min-h-11 items-center whitespace-nowrap px-3 font-semibold text-[#6f2633] underline decoration-[#c9a760] underline-offset-4 hover:text-[#4c1822] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6f2633]">Edit details</Link>
+                      </td>
                       <td className="px-4 py-4 text-[#5f5449]">{parishioner.email}<br />{parishioner.phone}</td>
                       <td className="px-4 py-4">{parishioner.address}</td>
                       <td className="px-4 py-4">{parishioner.occupation}</td>
@@ -57,7 +60,7 @@ export default async function ViewParishioners(props: { searchParams: Promise<{ 
                       <td className="px-4 py-4">{parishioner.married ? 'Yes' : 'No'}</td>
                     </tr>
                   ))}
-                  {!parishioners?.length && <tr><td colSpan={10} className="px-6 py-14 text-center text-[#6f6254]">No parishioners match this search.</td></tr>}
+                  {!parishioners?.length && <tr><td colSpan={11} className="px-6 py-14 text-center text-[#6f6254]">No parishioners match this search.</td></tr>}
                 </tbody>
               </table>
             </div>

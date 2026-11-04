@@ -7,6 +7,8 @@ import { ContactFormSchema, ParishionerRegistrationSchema, REGISTRATION_FEE_KOBO
 import { revalidatePath } from "next/cache"
 import { requireAdminSession } from "./admin-auth"
 import { sendParishEmail } from "./email"
+import { isObjectIdOrHexString, Types } from "mongoose"
+import type { ParishionerRegistrationErrors } from "./validations"
 
 export async function handleContact(formData: FormData){
   const validata = ContactFormSchema.safeParse(Object.fromEntries(formData))
@@ -96,6 +98,56 @@ export async function registerParishionerByAdmin(formData: FormData) {
   return createParishioner(formData)
 }
 
+export type ParishionerUpdateResult = {
+  success: boolean;
+  error?: string;
+  fieldErrors?: ParishionerRegistrationErrors;
+};
+
+export async function updateParishionerByAdmin(id: string, formData: FormData): Promise<ParishionerUpdateResult> {
+  await requireAdminSession()
+  if (!isObjectIdOrHexString(id)) {
+    return { success: false, error: 'This parishioner record could not be found. Return to the register and try again.' }
+  }
+
+  const validated = ParishionerRegistrationSchema.safeParse(Object.fromEntries(formData))
+  if (!validated.success) {
+    return { success: false, error: 'Please check the highlighted details and try again.', fieldErrors: validated.error.flatten().fieldErrors }
+  }
+
+  const data = validated.data
+  try {
+    await connectToDb()
+    const duplicate = await Parishioner.exists({
+      _id: { $ne: id }, firstName: data.firstName, lastName: data.lastName,
+    })
+    if (duplicate) {
+      return { success: false, error: 'Another parishioner is already registered with this first and last name. Check the names before saving.' }
+    }
+
+    const result = await Parishioner.updateOne({ _id: id }, { $set: {
+      ...data,
+      phone: data.phone ?? '',
+      baptized: Boolean(data.baptized),
+      confirmed: Boolean(data.confirmed),
+      communicant: Boolean(data.communicant),
+      married: Boolean(data.married),
+    } }, { runValidators: true })
+
+    if (!result.matchedCount) {
+      return { success: false, error: 'This parishioner record no longer exists. Return to the register to choose another record.' }
+    }
+  } catch (error) {
+    console.error('Parishioner update failed:', error)
+    return { success: false, error: 'The details could not be saved. Your changes are still here; please try again.' }
+  }
+
+  revalidatePath('/admin/parishioners')
+  revalidatePath(`/admin/parishioners/${id}/edit`)
+  revalidatePath(`/registrationhold/${id}`)
+  return { success: true }
+}
+
 export async function allParishioners(page: number, limit: number, query?: string){
   await requireAdminSession()
   try {
@@ -113,7 +165,7 @@ export async function allParishioners(page: number, limit: number, query?: strin
 
     const totalParishionersCount = await Parishioner.countDocuments(parishionersQuery.getQuery());
     const skip = (page - 1) * limit
-    const parishioners: IParishioner[] = await parishionersQuery.skip(skip).limit(limit).exec();
+    const parishioners: (IParishioner & { _id: Types.ObjectId })[] = await parishionersQuery.skip(skip).limit(limit).exec();
     
     return { success: true, data: parishioners, error: null, totalItems: totalParishionersCount }
   } catch(error: any) {
